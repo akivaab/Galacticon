@@ -1,16 +1,35 @@
-# This is a sample Python script.
+import pygame
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# initialize
+pygame.init()
+
+# create screen
+screen = pygame.display.set_mode((800, 600))
+
+# screen window caption and icon
+pygame.display.set_caption("Galacticon")
+icon = pygame.image.load("assets/logo.png")
+pygame.display.set_icon(icon)
+
+# init player
+playerImg = pygame.image.load("assets/player.png")
+playerX = 370
+playerY = 480
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def player():
+    screen.blit(playerImg, (playerX, playerY))
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+# game loop
+running = True
+while running:
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    screen.fill((0, 0, 0))
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    player()
+    pygame.display.update()
