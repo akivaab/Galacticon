@@ -19,9 +19,13 @@ class Player:
     def display(self, screen):
         screen.blit(self.image, (self.x, self.y))
 
-    def move(self, x_change, y_change):
-        self.x = x_change
-        self.y = y_change
+    def move(self, x_change, y_change, x_lower_limit, x_upper_limit, y_lower_limit, y_upper_limit):
+        new_x = self.x + x_change
+        new_y = self.y + y_change
+        if x_lower_limit <= new_x <= x_upper_limit:
+            self.x += new_x
+        if y_lower_limit <= new_y <= y_upper_limit:
+            self.y += new_y
 
     def fire(self):
         if self.bullets_fired.count() <= 3:
