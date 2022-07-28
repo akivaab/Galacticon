@@ -34,7 +34,7 @@ for i in range(num_enemies):
     enemyY_change.append(40)
 
 # init bullet
-bulletImg = pygame.image.load("assets/bullet.png").convert()
+bulletImg = pygame.image.load("assets/bullet1.png").convert()
 bulletX = 0
 bulletY = 480
 bulletX_change = 0
