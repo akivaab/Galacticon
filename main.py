@@ -11,7 +11,7 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Galacticon")
 icon = pygame.image.load("assets/logo.png").convert()
 pygame.display.set_icon(icon)
-print(pygame.font.get_fonts())
+
 # init player
 playerImg = pygame.image.load("assets/player.png").convert()
 playerX = 370
@@ -45,11 +45,17 @@ score_value = 0
 font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
 textX = 10
 textY = 10
+game_over_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
 
 
 def show_score(x, y):
     score = font.render("Score: " + str(score_value), True, (255, 255, 255))
     screen.blit(score, (x, y))
+
+
+def game_over():
+    game_over_text = game_over_font.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(game_over_text, (125, 250))
 
 
 def player(x, y):
@@ -96,6 +102,14 @@ while running:
         playerX = 736
 
     for i in range(num_enemies):
+
+        # game over
+        if enemyY[i] > 440:
+            for j in range(num_enemies):
+                enemyY[j] = 2000
+            game_over()
+            break
+
         enemyX[i] += enemyX_change[i]
         if enemyX[i] < 0:
             enemyX_change[i] = 0.2
