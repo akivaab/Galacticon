@@ -14,10 +14,10 @@ pygame.display.set_caption("Galacticon")
 icon = pygame.image.load("assets/logo.png").convert()
 pygame.display.set_icon(icon)
 
-score_value = 0
+clock = pygame.time.Clock()
 
 
-def show_score():
+def show_score(score_value):
     font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
     score = font.render("Score: " + str(score_value), True, (255, 255, 255))
     screen.blit(score, (0, 584))
@@ -30,36 +30,37 @@ def game_over():
 
 
 def enemy_line_setup(enemy_img):
-    line1 = [Enemy(x, 20, enemy_img) for x in range(0, 736, 80)]
-    line2 = [Enemy(x, 100, enemy_img) for x in range(0, 736, 80)]
-    line3 = [Enemy(x, 180, enemy_img) for x in range(0, 736, 80)]
+    line1 = [Enemy(x, 20, enemy_img) for x in range(0, 736, 100)]
+    line2 = [Enemy(x, 100, enemy_img) for x in range(0, 736, 100)]
+    line3 = [Enemy(x, 180, enemy_img) for x in range(0, 736, 100)]
     return [line1, line2, line3]
 
 
 def main():
     player = Player()
-    enemies = enemy_line_setup()
+    enemies_grid = enemy_line_setup(pygame.image.load("assets/enemy1.png").convert())
+    score_value = 0
+    player_x_change = 0
+    player_y_change = 0
 
     # game loop
     running = True
     while running:
         screen.fill((0, 0, 0))
 
-        player_x_change = 0
-        player_y_change = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             # arrow keystrokes
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    player_x_change = -0.2
+                    player_x_change = -3
                 if event.key == pygame.K_RIGHT:
-                    player_x_change = 0.2
+                    player_x_change = 3
                 if event.key == pygame.K_UP:
-                    player_y_change = -0.2
+                    player_y_change = -3
                 if event.key == pygame.K_DOWN:
-                    player_y_change = 0.2
+                    player_y_change = 3
                 if event.key == pygame.K_SPACE:
                     player.fire()
             if event.type == pygame.KEYUP:
@@ -67,48 +68,30 @@ def main():
                     player_x_change = 0
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     player_y_change = 0
-        player.move(player_x_change, player_y_change, 0, 736, 375, 436)
+        player.move(player_x_change, player_y_change)
 
-        # UP TO HERE
-
-        for i in range(num_enemies):
-
-            # game over
-            if enemyY[i] > 440:
-                for j in range(num_enemies):
-                    enemyY[j] = 2000
-                game_over()
-                break
-
-            enemyX[i] += enemyX_change[i]
-            if enemyX[i] < 0:
-                enemyX_change[i] = 0.2
-                enemyY[i] += enemyY_change[i]
-            elif enemyX[i] > 736:
-                enemyX_change[i] = -0.2
-                enemyY[i] += enemyY_change[i]
-
-            # collision
-            enemyRect = pygame.rect.Rect(enemyX[i] + 8, enemyY[i] + 8, 48, 48)
-            bulletRect = pygame.rect.Rect(bulletX + 28, bulletY, 8, 32)
-            collision = enemyRect.colliderect(bulletRect)
-            if collision:
-                bulletY = 480
-                bulletState = "ready"
-                enemyX[i] = random.randint(0, 736)
-                enemyY[i] = random.randint(50, 150)
-                score_value += 1
-
-            enemy(enemyX[i], enemyY[i], i)
+        for enemy_line in enemies_grid:
+            for enemy in enemy_line:
+                # game over
+                if player.hit_box.collidelist([bullet.hit_box for bullet in enemy.bullets_fired]) != -1:
+                    game_over()
+                    break
+                enemy.move()
+                # collision
+                colliding_bullet = enemy.hit_box.collidelist([bullet.hit_box for bullet in player.bullets_fired])
+                if colliding_bullet != -1:
+                    player.bullets_fired.pop(colliding_bullet)
+                    score_value += 1
+                enemy.display(screen)
 
         # bullet movement
-        if bulletY < 0:
-            bulletY = 480
-            bulletState = "ready"
-        if bulletState == "fire":
-            fire_bullet(bulletX, bulletY)
-            bulletY -= bulletY_change
+        player.move_bullets()
+        player.bullets_fired = list(filter(lambda b: b.y >= 0, player.bullets_fired))
 
-        player(playerX, playerY)
-        show_score()
+        player.display(screen)
+        show_score(score_value)
+        clock.tick(60)
         pygame.display.update()
+
+
+main()
