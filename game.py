@@ -30,15 +30,16 @@ def game_over():
 
 
 def enemy_line_setup(enemy_img):
-    line1 = [Enemy(x, 20, enemy_img) for x in range(0, 736, 100)]
-    line2 = [Enemy(x, 100, enemy_img) for x in range(0, 736, 100)]
-    line3 = [Enemy(x, 180, enemy_img) for x in range(0, 736, 100)]
+    line1 = [Enemy(x, 20, enemy_img) for x in range(8, 736, 100)]
+    line2 = [Enemy(x, 100, enemy_img) for x in range(8, 736, 100)]
+    line3 = [Enemy(x, 180, enemy_img) for x in range(8, 736, 100)]
     return [line1, line2, line3]
 
 
 def main():
     player = Player()
-    enemies_grid = enemy_line_setup(pygame.image.load("assets/enemy1.png").convert())
+    original_enemy_img = pygame.image.load("assets/enemy1.png").convert()
+    enemies_grid = enemy_line_setup(pygame.transform.scale(original_enemy_img, (54, 54)))
     score_value = 0
     player_x_change = 0
     player_y_change = 0

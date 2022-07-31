@@ -10,19 +10,21 @@ class Enemy:
         self.image = image
         self.bullets_fired = []
         self.hit_box = pygame.rect.Rect(self.x + 8, self.y + 8, 48, 48)
-        self.movement_area = pygame.rect.Rect(self.x, self.y, 128, 128)
+        self.movement_area = pygame.rect.Rect(self.x, self.y, 90, 90)
         self.movement_stage = 0
 
     def display(self, screen):
         screen.blit(self.image, (self.x, self.y))
 
     def move(self):
-        dx = [0, 2, 0, -2]
-        dy = [2, 0, -2, 0]
+        dx = [0, 1, 0, -1]
+        dy = [1, 0, -1, 0]
         new_hit_box = self.hit_box.move(dx[self.movement_stage], dy[self.movement_stage])
         if not self.movement_area.contains(new_hit_box):
             self.movement_stage = (self.movement_stage + 1) % 4
             new_hit_box = self.hit_box.move(dx[self.movement_stage], dy[self.movement_stage])
+        self.x += dx[self.movement_stage]
+        self.y += dy[self.movement_stage]
         self.hit_box = new_hit_box
 
     def random_fire(self):

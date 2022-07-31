@@ -4,7 +4,8 @@ from Bullet import *
 
 class Player:
     def __init__(self):
-        self.image = pygame.image.load("assets/player.png").convert()
+        original_player_img = pygame.image.load("assets/player.png").convert()
+        self.image = pygame.transform.scale(original_player_img, (54, 54))
         self.x = 370
         self.y = 480
         self.lives = 3
