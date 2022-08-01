@@ -31,6 +31,7 @@ class Enemy:
         if random.randint(0, 750) < 2:
             bullet_img = pygame.image.load("assets/enemy_bullet.png").convert()
             bullet_img.set_colorkey((0, 0, 0))
+            bullet_img = pygame.transform.scale(bullet_img, (40, 40))
             self.bullets_fired.append(Bullet(self.x + 16, self.y + 32, bullet_img, 2))
 
     def move_bullets(self):

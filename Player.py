@@ -43,3 +43,14 @@ class Player:
     def move_bullets(self):
         for bullet in self.bullets_fired:
             bullet.move()
+
+    def lose_life(self):
+        self.y = 2000
+        self.hit_box.update(0, self.y, 0, 0)
+        self.lives -= 1
+
+    def recenter(self):
+        self.x = 370
+        self.y = 480
+        self.num_turrets = 1
+        self.hit_box.update(self.x, self.y + 8, 64, 48)
