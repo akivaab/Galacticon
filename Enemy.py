@@ -28,10 +28,15 @@ class Enemy:
         self.hit_box = new_hit_box
 
     def random_fire(self):
-        if random.random() > 0.5:
+        if random.randint(0, 750) < 2:
             bullet_img = pygame.image.load("assets/enemy_bullet.png").convert()
-            self.bullets_fired.append(Bullet(self.x + 16, self.y + 32, bullet_img, 4))
+            bullet_img.set_colorkey((0, 0, 0))
+            self.bullets_fired.append(Bullet(self.x + 16, self.y + 32, bullet_img, 2))
 
     def move_bullets(self):
         for bullet in self.bullets_fired:
             bullet.move()
+
+    def explode(self):
+        self.y = 2000
+        self.hit_box.update(0, 2000, 0, 0)

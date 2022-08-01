@@ -30,15 +30,16 @@ def game_over():
 
 
 def enemy_line_setup(enemy_img):
-    line1 = [Enemy(x, 20, enemy_img) for x in range(8, 736, 100)]
-    line2 = [Enemy(x, 100, enemy_img) for x in range(8, 736, 100)]
-    line3 = [Enemy(x, 180, enemy_img) for x in range(8, 736, 100)]
+    line1 = [Enemy(x, 20, enemy_img) for x in range(10, 736, 100)]
+    line2 = [Enemy(x, 100, enemy_img) for x in range(10, 736, 100)]
+    line3 = [Enemy(x, 180, enemy_img) for x in range(10, 736, 100)]
     return [line1, line2, line3]
 
 
 def main():
     player = Player()
     original_enemy_img = pygame.image.load("assets/enemy1.png").convert()
+    original_enemy_img.set_colorkey((0, 0, 0))
     enemies_grid = enemy_line_setup(pygame.transform.scale(original_enemy_img, (54, 54)))
     score_value = 0
     player_x_change = 0
@@ -71,27 +72,39 @@ def main():
                     player_y_change = 0
         player.move(player_x_change, player_y_change)
 
+        # bullet movement
+        player.move_bullets()
+        player.bullets_fired = list(filter(lambda b: b.y >= 0, player.bullets_fired))
+        for bullet in player.bullets_fired:
+            bullet.display(screen)
+
+        player.display(screen)
+
+        killed_enemies = []
         for enemy_line in enemies_grid:
             for enemy in enemy_line:
                 # game over
-                if player.hit_box.collidelist([bullet.hit_box for bullet in enemy.bullets_fired]) != -1:
-                    game_over()
-                    break
+                # if player.hit_box.collidelist([bullet.hit_box for bullet in enemy.bullets_fired]) != -1:
+                # game_over()
+                #    break
                 enemy.move()
                 # collision
                 colliding_bullet = enemy.hit_box.collidelist([bullet.hit_box for bullet in player.bullets_fired])
                 if colliding_bullet != -1:
+                    enemy.explode()
                     player.bullets_fired.pop(colliding_bullet)
                     score_value += 1
                 enemy.display(screen)
 
-        # bullet movement
-        player.move_bullets()
-        player.bullets_fired = list(filter(lambda b: b.y >= 0, player.bullets_fired))
+                # bullet movement
+                enemy.random_fire()
+                enemy.move_bullets()
+                enemy.bullets_fired = list(filter(lambda b: b.y >= 0, enemy.bullets_fired))
+                for bullet in enemy.bullets_fired:
+                    bullet.display(screen)
 
-        player.display(screen)
         show_score(score_value)
-        clock.tick(60)
+        clock.tick(75)
         pygame.display.update()
 
 

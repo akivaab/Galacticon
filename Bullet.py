@@ -13,5 +13,5 @@ class Bullet:
         screen.blit(self.image, (self.x, self.y))
 
     def move(self):
-        self.y -= self.speed
-        self.hit_box.move_ip(0, -self.speed)
+        self.y += self.speed
+        self.hit_box.move_ip(0, self.speed)
