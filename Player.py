@@ -20,7 +20,7 @@ class Player:
         self.bullet_types = [bullet1, bullet2, bullet3]
         self.bullet_speeds = [5, 6.5, 5.5]
         self.bullets_fired = []
-        self.hit_box = pygame.rect.Rect(self.x, self.y + 8, 64, 48)
+        self.mask = pygame.mask.from_surface(self.image)
 
     def display(self, screen):
         screen.blit(self.image, (self.x, self.y))
@@ -32,7 +32,6 @@ class Player:
             self.x = new_x
         if y_lower_limit <= new_y <= y_upper_limit:
             self.y = new_y
-        self.hit_box.update(self.x, self.y, 64, 48)
 
     def fire(self):
         if len(self.bullets_fired) < 3:
@@ -46,11 +45,9 @@ class Player:
 
     def lose_life(self):
         self.y = 2000
-        self.hit_box.update(0, self.y, 0, 0)
         self.lives -= 1
 
     def recenter(self):
         self.x = 370
         self.y = 480
         self.num_turrets = 1
-        self.hit_box.update(self.x, self.y + 8, 64, 48)

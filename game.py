@@ -42,6 +42,15 @@ def enemy_line_setup(enemy_img):
     return [line1, line2, line3]
 
 
+def is_collision(ship, bullet_list):
+    for i in range(len(bullet_list)):
+        dx = bullet_list[i].x - ship.x
+        dy = bullet_list[i].y - ship.y
+        if ship.mask.overlap(bullet_list[i].mask, (dx, dy)) is not None:
+            return True, i
+    return False, -1
+
+
 def main():
     player = Player()
     original_enemy_img = pygame.image.load("assets/enemy1.png").convert()
@@ -94,13 +103,13 @@ def main():
             for enemy_line in enemies_grid:
                 for enemy in enemy_line:
                     # player loses life
-                    if player.hit_box.collidelist([bullet.hit_box for bullet in enemy.bullets_fired]) != -1:
+                    if is_collision(player, enemy.bullets_fired)[0]:
                         player.lose_life()
                         level_running = False
                     enemy.move()
                     # enemy shot
-                    colliding_bullet = enemy.hit_box.collidelist([bullet.hit_box for bullet in player.bullets_fired])
-                    if colliding_bullet != -1:
+                    (collided, colliding_bullet) = is_collision(enemy, player.bullets_fired)
+                    if collided:
                         enemy.explode()
                         player.bullets_fired.pop(colliding_bullet)
                         score_value += 1

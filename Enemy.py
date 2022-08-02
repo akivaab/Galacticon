@@ -1,4 +1,3 @@
-import pygame
 import random
 from Bullet import *
 
@@ -9,7 +8,8 @@ class Enemy:
         self.y = y
         self.image = image
         self.bullets_fired = []
-        self.hit_box = pygame.rect.Rect(self.x + 8, self.y + 8, 48, 48)
+        self.mask = pygame.mask.from_surface(self.image)
+        self.box = self.mask.get_rect().move(self.x, self.y)
         self.movement_area = pygame.rect.Rect(self.x, self.y, 90, 90)
         self.movement_stage = 0
 
@@ -19,16 +19,16 @@ class Enemy:
     def move(self):
         dx = [0, 1, 0, -1]
         dy = [1, 0, -1, 0]
-        new_hit_box = self.hit_box.move(dx[self.movement_stage], dy[self.movement_stage])
-        if not self.movement_area.contains(new_hit_box):
+        new_box = self.box.move(dx[self.movement_stage], dy[self.movement_stage])
+        if not self.movement_area.contains(new_box):
             self.movement_stage = (self.movement_stage + 1) % 4
-            new_hit_box = self.hit_box.move(dx[self.movement_stage], dy[self.movement_stage])
+            new_box = self.box.move(dx[self.movement_stage], dy[self.movement_stage])
         self.x += dx[self.movement_stage]
         self.y += dy[self.movement_stage]
-        self.hit_box = new_hit_box
+        self.box = new_box
 
     def random_fire(self):
-        if random.randint(0, 750) < 2:
+        if random.randint(0, 375) == 42:
             bullet_img = pygame.image.load("assets/enemy_bullet.png").convert()
             bullet_img.set_colorkey((0, 0, 0))
             bullet_img = pygame.transform.scale(bullet_img, (40, 40))
@@ -40,4 +40,3 @@ class Enemy:
 
     def explode(self):
         self.y = 2000
-        self.hit_box.update(0, 2000, 0, 0)
