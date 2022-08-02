@@ -8,6 +8,7 @@ class Enemy:
         self.y = y
         self.image = image
         self.bullets_fired = []
+        self.alive = True
         self.mask = pygame.mask.from_surface(self.image)
         self.box = self.mask.get_rect().move(self.x, self.y)
         self.movement_area = pygame.rect.Rect(self.x, self.y, 90, 90)
@@ -40,3 +41,4 @@ class Enemy:
 
     def explode(self):
         self.y = 2000
+        self.alive = False

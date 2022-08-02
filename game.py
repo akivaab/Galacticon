@@ -1,3 +1,4 @@
+from LevelGenerator import *
 from Player import *
 from Enemy import *
 
@@ -15,15 +16,23 @@ pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
 
 
-def show_game_data(score_value, lives_value):
+def show_game_data(score_value, lives_value, level_value):
     font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
     score = font.render("Score:" + str(score_value), True, (255, 255, 255))
     lives = font.render("Lives:" + str(lives_value), True, (255, 255, 255))
+    level = font.render("Level:" + str(level_value), True, (255, 255, 255))
     screen.blit(score, (0, 584))
-    screen.blit(lives, (140, 584))
+    screen.blit(lives, (520, 584))
+    screen.blit(level, (660, 584))
 
 
-def get_ready():
+def next_level(level_num):
+    next_level_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 32)
+    next_level_text = next_level_font.render("Level " + str(level_num), True, (255, 255, 255))
+    screen.blit(next_level_text, (285, 280))
+
+
+def resuscitate():
     get_ready_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
     get_ready_text = get_ready_font.render("You Died! Get Ready To Continue", True, (255, 255, 255))
     screen.blit(get_ready_text, (30, 250))
@@ -33,6 +42,14 @@ def game_over():
     game_over_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
     game_over_text = game_over_font.render("GAME OVER", True, (255, 255, 255))
     screen.blit(game_over_text, (110, 250))
+
+
+def level_completed(enemies_grid):
+    for enemy_line in enemies_grid:
+        for enemy in enemy_line:
+            if enemy.alive is True:
+                return False
+    return True
 
 
 def enemy_line_setup(enemy_img):
@@ -52,15 +69,16 @@ def is_collision(ship, bullet_list):
 
 
 def main():
+    level_generator = LevelGenerator()
+    level_number = 1
+    enemies_grid = level_generator.generate_enemy_setup(level_number)
     player = Player()
-    original_enemy_img = pygame.image.load("assets/enemy1.png").convert()
-    original_enemy_img.set_colorkey((0, 0, 0))
-    enemies_grid = enemy_line_setup(pygame.transform.scale(original_enemy_img, (54, 54)))
     score_value = 0
 
     # game loop
     game_running = True
     while game_running:
+        level_is_completed = False
         player_x_change = 0
         player_y_change = 0
 
@@ -122,9 +140,14 @@ def main():
                     for bullet in enemy.bullets_fired:
                         bullet.display(screen)
 
-            show_game_data(score_value, player.lives)
+            show_game_data(score_value, player.lives, level_number)
             clock.tick(75)
             pygame.display.update()
+
+            # level completed
+            level_is_completed = level_completed(enemies_grid)
+            if level_is_completed:
+                level_running = False
 
         # level stopped
         player.bullets_fired.clear()
@@ -132,16 +155,20 @@ def main():
             for enemy in enemy_line:
                 enemy.bullets_fired.clear()
 
-        # player lost life
         if player.lives == 0:
             game_over()
             game_running = False
+        elif level_is_completed:
+            level_number += 1
+            next_level(level_number)
+            enemies_grid = level_generator.generate_enemy_setup(level_number)
+        # player lost life
         elif game_running:
-            get_ready()
+            resuscitate()
             player.recenter()
 
         pygame.display.update()
-        pygame.time.wait(1000)
+        pygame.time.wait(1500)
 
 
 main()
