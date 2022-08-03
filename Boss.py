@@ -26,6 +26,7 @@ class Boss(Enemy):
             self.bullets_fired.append(Bullet(self.x + 24, self.y + 32, bullet_img, 4 + (.25 * self.level_grouping)))
 
     def hit(self):
+        pygame.mixer.Sound("assets/explosion.wav").play()
         self.num_hits -= 1
         if self.num_hits == 0:
             super().hit()

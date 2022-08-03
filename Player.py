@@ -1,3 +1,5 @@
+import pygame.mixer
+
 from Bullet import *
 
 
@@ -37,12 +39,14 @@ class Player:
             bullet_type = self.bullet_types[self.num_turrets - 1]
             bullet_speed = self.bullet_speeds[self.num_turrets - 1]
             self.bullets_fired.append(Bullet(self.x + 11, self.y - 15, bullet_type, -bullet_speed))
+            pygame.mixer.Sound("assets/laser.wav").play()
 
     def move_bullets(self):
         for bullet in self.bullets_fired:
             bullet.move()
 
     def lose_life(self):
+        pygame.mixer.Sound("assets/explosion.wav").play(0, 800)
         self.y = 2000
         self.lives -= 1
 
