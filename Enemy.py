@@ -39,6 +39,6 @@ class Enemy:
         for bullet in self.bullets_fired:
             bullet.move()
 
-    def explode(self):
+    def hit(self):
         self.y = 2000
         self.alive = False

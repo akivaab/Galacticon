@@ -33,7 +33,7 @@ class Player:
             self.y = new_y
 
     def fire(self):
-        if len(self.bullets_fired) < 3:
+        if len(self.bullets_fired) < 5:
             bullet_type = self.bullet_types[self.num_turrets - 1]
             bullet_speed = self.bullet_speeds[self.num_turrets - 1]
             self.bullets_fired.append(Bullet(self.x + 11, self.y - 15, bullet_type, -bullet_speed))

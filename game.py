@@ -128,7 +128,7 @@ def main():
                     # enemy shot
                     (collided, colliding_bullet) = is_collision(enemy, player.bullets_fired)
                     if collided:
-                        enemy.explode()
+                        enemy.hit()
                         player.bullets_fired.pop(colliding_bullet)
                         score_value += 1
                     enemy.display(screen)
