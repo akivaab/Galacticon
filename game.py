@@ -10,7 +10,7 @@ screen = pygame.display.set_mode((800, 600))
 
 # screen window caption and icon
 pygame.display.set_caption("Galacticon")
-icon = pygame.image.load("assets/logo.png").convert()
+icon = pygame.image.load("assets/logo.png").convert_alpha()
 pygame.display.set_icon(icon)
 
 clock = pygame.time.Clock()
@@ -18,12 +18,12 @@ clock = pygame.time.Clock()
 
 def show_game_data(score_value, lives_value, level_value):
     font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
-    score = font.render("Score:" + str(score_value), True, (255, 255, 255))
     lives = font.render("Lives:" + str(lives_value), True, (255, 255, 255))
     level = font.render("Level:" + str(level_value), True, (255, 255, 255))
-    screen.blit(score, (0, 584))
-    screen.blit(lives, (520, 584))
-    screen.blit(level, (660, 584))
+    score = font.render("Score:" + str(score_value), True, (255, 255, 255))
+    screen.blit(lives, (0, 584))
+    screen.blit(level, (150, 584))
+    screen.blit(score, (300, 584))
 
 
 def next_level(level_num):
@@ -50,13 +50,6 @@ def level_completed(enemies_grid):
             if enemy.alive is True:
                 return False
     return True
-
-
-def enemy_line_setup(enemy_img):
-    line1 = [Enemy(x, 20, enemy_img) for x in range(10, 736, 100)]
-    line2 = [Enemy(x, 100, enemy_img) for x in range(10, 736, 100)]
-    line3 = [Enemy(x, 180, enemy_img) for x in range(10, 736, 100)]
-    return [line1, line2, line3]
 
 
 def is_collision(ship, bullet_list):
@@ -89,6 +82,7 @@ def main():
             # events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    pygame.display.set_caption("You DARE quit Galacticon?!! YOU SHALL REGRET THIS!!")
                     level_running = False
                     game_running = False
                 # arrow keystrokes
