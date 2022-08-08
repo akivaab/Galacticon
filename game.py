@@ -15,6 +15,9 @@ pygame.display.set_icon(icon)
 
 clock = pygame.time.Clock()
 
+pygame.mixer.music.load("assets/deltarune_knock_you_down.wav")
+pygame.mixer.music.play(-1)
+
 
 def show_game_data(score_value, lives_value, level_value):
     font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
