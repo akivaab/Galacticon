@@ -1,6 +1,6 @@
-from LevelGenerator import *
+from Game import *
 from Player import *
-from Enemy import *
+from ClassicEnemy import *
 
 # initialize
 pygame.init()
@@ -65,9 +65,8 @@ def is_collision(ship, bullet_list):
 
 
 def main():
-    level_generator = LevelGenerator()
-    level_number = 1
-    enemies_grid = level_generator.generate_enemy_setup(level_number)
+    game = Game()
+    enemies_grid = game.get_cur_enemy_setup()
     player = Player()
     score_value = 0
 
@@ -137,7 +136,7 @@ def main():
                     for bullet in enemy.bullets_fired:
                         bullet.display(screen)
 
-            show_game_data(score_value, player.lives, level_number)
+            show_game_data(score_value, player.lives, game.current_level)
             clock.tick(75)
             pygame.display.update()
 
@@ -156,9 +155,9 @@ def main():
             game_over()
             game_running = False
         elif level_is_completed:
-            level_number += 1
-            next_level(level_number)
-            enemies_grid = level_generator.generate_enemy_setup(level_number)
+            game.go_to_next_level()
+            next_level(game.current_level)
+            enemies_grid = game.get_cur_enemy_setup()
         # player lost life
         elif game_running:
             resuscitate()
