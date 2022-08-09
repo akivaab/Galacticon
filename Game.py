@@ -1,6 +1,7 @@
 from Level import *
 from Boss import *
 from ClassicEnemy import *
+from SideswiperEnemy import *
 
 
 class Game:
@@ -20,9 +21,6 @@ class Game:
 
     def get_cur_enemy_setup(self):
         return self.levels[self.current_level - 1].get_enemy_setup()
-        # enemy_img = self.enemy_images[int((level_num - 1) / 3)]
-        # enemy_setup_function = self.enemy_setups[(level_num - 1) % 3]
-        # return enemy_setup_function(enemy_img, int((level_num - 1) / 3))
 
     def go_to_next_level(self):
         self.current_level += 1

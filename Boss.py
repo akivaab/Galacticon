@@ -10,6 +10,7 @@ class Boss(Enemy):
         super().__init__(320, 10, boss_img, ship_speed, bullet_speed, fire_freq)
         self.direction = 1
         self.num_hits = num_hits
+        self.score_value = 500
 
     def move(self):
         move_distance = self.direction * self.ship_speed

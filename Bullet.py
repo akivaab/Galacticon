@@ -12,5 +12,8 @@ class Bullet:
     def display(self, screen):
         screen.blit(self.image, (self.x, self.y))
 
-    def move(self):
+    def move_vertical(self):
         self.y += self.speed
+
+    def move_horizontal(self):
+        self.x += self.speed

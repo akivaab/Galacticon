@@ -55,13 +55,20 @@ def level_completed(enemies_grid):
     return True
 
 
-def is_collision(ship, bullet_list):
-    for i in range(len(bullet_list)):
-        dx = bullet_list[i].x - ship.x
-        dy = bullet_list[i].y - ship.y
-        if ship.mask.overlap(bullet_list[i].mask, (dx, dy)) is not None:
-            return True, i
-    return False, -1
+def is_collision(obj1, obj2):
+    if isinstance(obj2, list):
+        for i in range(len(obj2)):
+            dx = obj2[i].x - obj1.x
+            dy = obj2[i].y - obj1.y
+            if obj1.mask.overlap(obj2[i].mask, (dx, dy)) is not None:
+                return True, i
+        return False, -1
+    else:
+        dx = obj2.x - obj1.x
+        dy = obj2.y - obj1.y
+        if obj1.mask.overlap(obj2.mask, (dx, dy)) is not None:
+            return True
+        return False
 
 
 def main():
@@ -116,8 +123,16 @@ def main():
 
             for enemy_line in enemies_grid:
                 for enemy in enemy_line:
+
+                    # enemy bullet movement
+                    enemy.random_fire()
+                    enemy.move_bullets()
+                    enemy.bullets_fired = list(filter(lambda b: b.y >= 0, enemy.bullets_fired))
+                    for bullet in enemy.bullets_fired:
+                        bullet.display(screen)
+
                     # player loses life
-                    if is_collision(player, enemy.bullets_fired)[0]:
+                    if is_collision(player, enemy.bullets_fired)[0] or is_collision(player, enemy):
                         player.lose_life()
                         level_running = False
                     enemy.move()
@@ -126,15 +141,8 @@ def main():
                     if collided:
                         enemy.hit()
                         player.bullets_fired.pop(colliding_bullet)
-                        score_value += 1
+                        score_value += enemy.score_value
                     enemy.display(screen)
-
-                    # enemy bullet movement
-                    enemy.random_fire()
-                    enemy.move_bullets()
-                    enemy.bullets_fired = list(filter(lambda b: b.y >= 0, enemy.bullets_fired))
-                    for bullet in enemy.bullets_fired:
-                        bullet.display(screen)
 
             show_game_data(score_value, player.lives, game.current_level)
             clock.tick(75)
@@ -150,6 +158,8 @@ def main():
         for enemy_line in enemies_grid:
             for enemy in enemy_line:
                 enemy.bullets_fired.clear()
+                if isinstance(enemy, SideswiperEnemy):
+                    enemy.move_offscreen()
 
         if player.lives == 0:
             game_over()

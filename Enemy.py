@@ -18,7 +18,7 @@ class Enemy:
 
     def move_bullets(self):
         for bullet in self.bullets_fired:
-            bullet.move()
+            bullet.move_vertical()
 
     def hit(self):
         self.y = 2000

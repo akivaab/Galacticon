@@ -43,7 +43,7 @@ class Player:
 
     def move_bullets(self):
         for bullet in self.bullets_fired:
-            bullet.move()
+            bullet.move_vertical()
 
     def lose_life(self):
         pygame.mixer.Sound("assets/explosion.wav").play(0, 800)
