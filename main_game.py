@@ -37,8 +37,8 @@ def next_level(level_num):
 
 def resuscitate():
     get_ready_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
-    get_ready_text = get_ready_font.render("You Died! Get Ready To Continue", True, (255, 255, 255))
-    screen.blit(get_ready_text, (30, 250))
+    get_ready_text = get_ready_font.render("Get Ready To Continue", True, (255, 255, 255))
+    screen.blit(get_ready_text, (150, 250))
 
 
 def game_over():
