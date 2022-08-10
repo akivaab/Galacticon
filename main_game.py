@@ -19,42 +19,6 @@ pygame.mixer.music.load("assets/deltarune_knock_you_down.wav")
 pygame.mixer.music.play(-1)
 
 
-def show_game_data(score_value, lives_value, level_value):
-    font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
-    lives = font.render("Lives:" + str(lives_value), True, (255, 255, 255))
-    level = font.render("Level:" + str(level_value), True, (255, 255, 255))
-    score = font.render("Score:" + str(score_value), True, (255, 255, 255))
-    screen.blit(lives, (0, 584))
-    screen.blit(level, (150, 584))
-    screen.blit(score, (300, 584))
-
-
-def next_level(level_num):
-    next_level_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 32)
-    next_level_text = next_level_font.render("Level " + str(level_num), True, (255, 255, 255))
-    screen.blit(next_level_text, (285, 280))
-
-
-def resuscitate():
-    get_ready_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
-    get_ready_text = get_ready_font.render("Get Ready To Continue", True, (255, 255, 255))
-    screen.blit(get_ready_text, (150, 250))
-
-
-def game_over():
-    game_over_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
-    game_over_text = game_over_font.render("GAME OVER", True, (255, 255, 255))
-    screen.blit(game_over_text, (110, 250))
-
-
-def level_completed(enemies_grid):
-    for enemy_line in enemies_grid:
-        for enemy in enemy_line:
-            if enemy.alive is True:
-                return False
-    return True
-
-
 def is_collision(obj1, obj2):
     if isinstance(obj2, list):
         for i in range(len(obj2)):
@@ -75,7 +39,6 @@ def main():
     game = Game()
     enemies_grid = game.get_cur_enemy_setup()
     player = Player()
-    score_value = 0
 
     # game loop
     game_running = True
@@ -132,7 +95,7 @@ def main():
                         bullet.display(screen)
 
                     # player loses life
-                    if is_collision(player, enemy.bullets_fired)[0] or is_collision(player, enemy):
+                    if is_collision(player, enemy.bullets_fired)[0]:  # or is_collision(player, enemy)
                         player.lose_life()
                         level_running = False
                     enemy.move()
@@ -141,15 +104,15 @@ def main():
                     if collided:
                         enemy.hit()
                         player.bullets_fired.pop(colliding_bullet)
-                        score_value += enemy.score_value
+                        game.increase_score(enemy.score_value)
                     enemy.display(screen)
 
-            show_game_data(score_value, player.lives, game.current_level)
+            game.display_data(screen, player.lives)
             clock.tick(75)
             pygame.display.update()
 
             # level completed
-            level_is_completed = level_completed(enemies_grid)
+            level_is_completed = game.is_current_level_completed()
             if level_is_completed:
                 level_running = False
 
@@ -162,15 +125,14 @@ def main():
                     enemy.move_offscreen()
 
         if player.lives == 0:
-            game_over()
+            Game.game_over_message(screen)
             game_running = False
         elif level_is_completed:
-            game.go_to_next_level()
-            next_level(game.current_level)
+            game.go_to_next_level(screen)
             enemies_grid = game.get_cur_enemy_setup()
         # player lost life
         elif game_running:
-            resuscitate()
+            Game.resuscitation_message(screen)
             player.recenter()
 
         pygame.display.update()

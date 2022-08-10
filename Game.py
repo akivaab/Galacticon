@@ -6,12 +6,12 @@ from SideswiperEnemy import *
 
 class Game:
     def __init__(self):
+        self.current_level = 1
         enemy_images = []
         for i in range(1, 7):
             enemy_img = pygame.image.load("assets/enemy" + str(i) + ".png").convert()
             enemy_img.set_colorkey((0, 0, 0))
             enemy_images.append(pygame.transform.scale(enemy_img, (54, 54)))
-        self.current_level = 1
         self.levels = [
             Level(enemy_setup_1(enemy_images[0], ship_speed=1, bullet_speed=2, fire_freq=375)),
             Level(enemy_setup_2(enemy_images[0], ship_speed=1, bullet_speed=2, fire_freq=375)),
@@ -32,12 +32,43 @@ class Game:
             Level(enemy_setup_2(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
             Level(enemy_setup_3(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
         ]
+        self.current_score = 0
 
     def get_cur_enemy_setup(self):
         return self.levels[self.current_level - 1].get_enemy_setup()
 
-    def go_to_next_level(self):
+    def is_current_level_completed(self):
+        return self.levels[self.current_level - 1].is_completed()
+
+    def go_to_next_level(self, screen):
         self.current_level += 1
+        next_level_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 32)
+        next_level_text = next_level_font.render("Level " + str(self.current_level), True, (255, 255, 255))
+        screen.blit(next_level_text, (285, 280))
+
+    def increase_score(self, value):
+        self.current_score += value
+
+    def display_data(self, screen, num_lives):
+        font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
+        lives = font.render("Lives:" + str(num_lives), True, (255, 255, 255))
+        level = font.render("Level:" + str(self.current_level), True, (255, 255, 255))
+        score = font.render("Score:" + str(self.current_score), True, (255, 255, 255))
+        screen.blit(lives, (0, 584))
+        screen.blit(level, (150, 584))
+        screen.blit(score, (300, 584))
+
+    @staticmethod
+    def resuscitation_message(screen):
+        get_ready_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
+        get_ready_text = get_ready_font.render("Get Ready To Continue", True, (255, 255, 255))
+        screen.blit(get_ready_text, (150, 280))
+
+    @staticmethod
+    def game_over_message(screen):
+        game_over_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
+        game_over_text = game_over_font.render("GAME OVER", True, (255, 255, 255))
+        screen.blit(game_over_text, (110, 250))
 
 
 # enemies are aligned in straight columns
