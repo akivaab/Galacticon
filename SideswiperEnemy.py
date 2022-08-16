@@ -1,5 +1,5 @@
 import random
-from Bullet import *
+# from Bullet import *
 from Enemy import *
 
 
@@ -28,17 +28,17 @@ class SideswiperEnemy(Enemy):
             self.y += move_distance / 20
 
     # Fire a bullet at random
-    def random_fire(self):
-        if random.randint(0, self.fire_freq) == 42:
-            bullet_img = pygame.image.load("assets/sideswiper_bullet.png").convert()
-            bullet_img.set_colorkey((0, 0, 0))
-            bullet_img = pygame.transform.scale(bullet_img, (44, 44))
-            self.bullets_fired.append(Bullet(self.x, self.y, bullet_img, self.bullet_speed))
+    # def random_fire(self):
+        # if random.randint(0, self.fire_freq) == 42:
+        #     bullet_img = pygame.image.load("assets/sideswiper_bullet.png").convert()
+        #     bullet_img.set_colorkey((0, 0, 0))
+        #     bullet_img = pygame.transform.scale(bullet_img, (44, 44))
+        #     self.bullets_fired.append(Bullet(self.x, self.y, bullet_img, self.bullet_speed))
 
     # Move all the fired bullets (horizontally)
-    def move_bullets(self):
-        for bullet in self.bullets_fired:
-            bullet.move_horizontal()
+    # def move_bullets(self):
+        # for bullet in self.bullets_fired:
+        #     bullet.move_horizontal()
 
     # Deduct from the number of hits the enemy can take
     def hit(self):

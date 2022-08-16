@@ -17,6 +17,14 @@ class Enemy:
     def display(self, screen):
         screen.blit(self.image, (self.x, self.y))
 
+    # Move the enemy on a predetermined track (implement in subclasses)
+    def move(self):
+        pass
+
+    # Fire a bullet at random (implement in subclasses)
+    def random_fire(self):
+        pass
+
     # Move all the fired bullets (downwards)
     def move_bullets(self):
         for bullet in self.bullets_fired:

@@ -19,18 +19,18 @@ class Game:
             Level(enemy_setup_1(enemy_images[1], ship_speed=1.2, bullet_speed=2.25, fire_freq=350)),
             Level(enemy_setup_2(enemy_images[1], ship_speed=1.2, bullet_speed=2.25, fire_freq=350)),
             Level(enemy_setup_3(enemy_images[1], ship_speed=1.2, bullet_speed=2.25, fire_freq=350)),
-            Level(enemy_setup_1(enemy_images[2], ship_speed=1.4, bullet_speed=2.5, fire_freq=325)),
+            Level(enemy_setup_4(enemy_images[2], ship_speed=1.4, bullet_speed=2.5, fire_freq=325)),
             Level(enemy_setup_2(enemy_images[2], ship_speed=1.4, bullet_speed=2.5, fire_freq=325)),
             Level(enemy_setup_3(enemy_images[2], ship_speed=1.4, bullet_speed=2.5, fire_freq=325)),
             Level(enemy_setup_1(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
-            Level(enemy_setup_2(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
+            Level(enemy_setup_5(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
             Level(enemy_setup_3(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
             Level(enemy_setup_1(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
             Level(enemy_setup_2(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
-            Level(enemy_setup_3(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
-            Level(enemy_setup_1(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
+            Level(enemy_setup_6(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
+            Level(enemy_setup_4(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
             Level(enemy_setup_2(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
-            Level(enemy_setup_3(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
+            Level(enemy_setup_6(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
         ]
         self.current_score = 0
 
@@ -111,3 +111,31 @@ def enemy_setup_3(enemy_img, ship_speed, bullet_speed, fire_freq):
     line2 = [ClassicEnemy(x, 85, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
     line3 = [ClassicEnemy(x, 160, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
     return [line1, line2, line3]
+
+
+# Enemies are aligned in straight columns, plus there is a sideswiper
+def enemy_setup_4(enemy_img, ship_speed, bullet_speed, fire_freq):
+    line1 = [ClassicEnemy(x, 20, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
+    line2 = [ClassicEnemy(x, 100, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
+    line3 = [ClassicEnemy(x, 180, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
+    sideswiper = [SideswiperEnemy(2, 4)]
+    return [line1, line2, line3, sideswiper]
+
+
+# In each row, enemies alternate columns, plus there is a sideswiper
+def enemy_setup_5(enemy_img, ship_speed, bullet_speed, fire_freq):
+    line1 = [ClassicEnemy(x, 20, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
+    line2 = [ClassicEnemy(x, 100, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(70, 726, 95)]
+    line3 = [ClassicEnemy(x, 180, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
+    sideswiper = [SideswiperEnemy(2, 4)]
+    return [line1, line2, line3, sideswiper]
+
+
+# Two condensed rows of enemies with a boss on top, plus there is a sideswiper
+def enemy_setup_6(enemy_img, ship_speed, bullet_speed, fire_freq):
+    line1 = [BossEnemy(3)]
+    line2 = [ClassicEnemy(x, 85, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
+    line3 = [ClassicEnemy(x, 160, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
+    sideswiper = [SideswiperEnemy(2, 4)]
+    return [line1, line2, line3, sideswiper]
+
