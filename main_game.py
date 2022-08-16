@@ -19,22 +19,6 @@ pygame.mixer.music.load("assets/deltarune_knock_you_down.wav")
 pygame.mixer.music.play(-1)
 
 
-def is_collision(obj1, obj2):
-    if isinstance(obj2, list):
-        for i in range(len(obj2)):
-            dx = obj2[i].x - obj1.x
-            dy = obj2[i].y - obj1.y
-            if obj1.mask.overlap(obj2[i].mask, (dx, dy)) is not None:
-                return True, i
-        return False, -1
-    else:
-        dx = obj2.x - obj1.x
-        dy = obj2.y - obj1.y
-        if obj1.mask.overlap(obj2.mask, (dx, dy)) is not None:
-            return True
-        return False
-
-
 def main():
     game = Game()
     enemies_grid = game.get_cur_enemy_setup()
@@ -78,7 +62,7 @@ def main():
 
             # player bullet movement
             player.move_bullets()
-            player.bullets_fired = list(filter(lambda b: b.y >= 0, player.bullets_fired))
+            player.remove_offscreen_bullets()
             for bullet in player.bullets_fired:
                 bullet.display(screen)
 
@@ -90,17 +74,17 @@ def main():
                     # enemy bullet movement
                     enemy.random_fire()
                     enemy.move_bullets()
-                    enemy.bullets_fired = list(filter(lambda b: b.y >= 0, enemy.bullets_fired))
+                    enemy.remove_offscreen_bullets()
                     for bullet in enemy.bullets_fired:
                         bullet.display(screen)
 
                     # player loses life
-                    if is_collision(player, enemy.bullets_fired)[0]:  # or is_collision(player, enemy)
+                    if player.collided_with_bullet(enemy.bullets_fired):  # or is_collision(player, enemy)
                         player.lose_life()
                         level_running = False
                     enemy.move()
                     # enemy shot
-                    (collided, colliding_bullet) = is_collision(enemy, player.bullets_fired)
+                    (collided, colliding_bullet) = enemy.collided_with_bullet(player.bullets_fired)
                     if collided:
                         enemy.hit()
                         player.bullets_fired.pop(colliding_bullet)
@@ -126,6 +110,9 @@ def main():
 
         if player.lives == 0:
             Game.game_over_message(screen)
+            game_running = False
+        elif game.is_completed():
+            Game.game_completed_message(screen)
             game_running = False
         elif level_is_completed:
             game.go_to_next_level(screen)

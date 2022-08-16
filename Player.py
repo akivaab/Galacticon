@@ -1,6 +1,7 @@
 import pygame.mixer
 
 from Bullet import *
+from SideswiperEnemy import SideswiperEnemy
 
 
 class Player:
@@ -44,6 +45,24 @@ class Player:
     def move_bullets(self):
         for bullet in self.bullets_fired:
             bullet.move_vertical()
+
+    def remove_offscreen_bullets(self):
+        self.bullets_fired = list(filter(lambda b: b.y >= 0, self.bullets_fired))
+
+    def collided_with_bullet(self, bullets: list):
+        for i in range(len(bullets)):
+            dx = bullets[i].x - self.x
+            dy = bullets[i].y - self.y
+            if self.mask.overlap(bullets[i].mask, (dx, dy)) is not None:
+                return True
+        return False
+
+    def collided_with_enemy(self, enemy: SideswiperEnemy):
+        dx = enemy.x - self.x
+        dy = enemy.y - self.y
+        if self.mask.overlap(enemy.mask, (dx, dy)) is not None:
+            return True
+        return False
 
     def lose_life(self):
         pygame.mixer.Sound("assets/explosion.wav").play(0, 800)

@@ -46,6 +46,9 @@ class Game:
         next_level_text = next_level_font.render("Level " + str(self.current_level), True, (255, 255, 255))
         screen.blit(next_level_text, (285, 280))
 
+    def is_completed(self):
+        return self.current_level == len(self.levels)  # and self.is_current_level_completed()
+
     def increase_score(self, value):
         self.current_score += value
 
@@ -69,6 +72,12 @@ class Game:
         game_over_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
         game_over_text = game_over_font.render("GAME OVER", True, (255, 255, 255))
         screen.blit(game_over_text, (110, 250))
+
+    @staticmethod
+    def game_completed_message(screen):
+        game_completed_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
+        game_completed_text = game_completed_font.render("YOU WIN!!", True, (255, 255, 255))
+        screen.blit(game_completed_text, (110, 250))
 
 
 # enemies are aligned in straight columns

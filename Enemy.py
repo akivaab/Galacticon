@@ -20,8 +20,17 @@ class Enemy:
         for bullet in self.bullets_fired:
             bullet.move_vertical()
 
+    def remove_offscreen_bullets(self):
+        self.bullets_fired = list(filter(lambda b: b.y >= 0, self.bullets_fired))
+
+    def collided_with_bullet(self, bullets: list):
+        for i in range(len(bullets)):
+            dx = bullets[i].x - self.x
+            dy = bullets[i].y - self.y
+            if self.mask.overlap(bullets[i].mask, (dx, dy)) is not None:
+                return True, i
+        return False, -1
+
     def hit(self):
         self.y = 2000
         self.alive = False
-
-
