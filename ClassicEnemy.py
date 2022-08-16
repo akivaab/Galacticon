@@ -11,6 +11,7 @@ class ClassicEnemy(Enemy):
         self.movement_stage = 0
         self.score_value = 100
 
+    # Move the enemy around a track (a rectangle perimeter)
     def move(self):
         if self.alive:
             dx = [0, self.ship_speed, 0, -self.ship_speed]
@@ -23,6 +24,7 @@ class ClassicEnemy(Enemy):
             self.y += dy[self.movement_stage]
             self.box = new_box
 
+    # Fire a bullet at random
     def random_fire(self):
         if random.randint(0, self.fire_freq) == 42:
             bullet_img = pygame.image.load("assets/enemy_bullet.png").convert()

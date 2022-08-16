@@ -13,24 +13,29 @@ class Enemy:
         self.bullets_fired = []
         self.mask = pygame.mask.from_surface(self.image)
 
+    # Display the enemy on the screen
     def display(self, screen):
         screen.blit(self.image, (self.x, self.y))
 
+    # Move all the fired bullets (downwards)
     def move_bullets(self):
         for bullet in self.bullets_fired:
             bullet.move_vertical()
 
+    # Remove all bullets that flew offscreen
     def remove_offscreen_bullets(self):
         self.bullets_fired = list(filter(lambda b: b.y >= 0, self.bullets_fired))
 
+    # Check if the enemy collided with the player's bullets
     def collided_with_bullet(self, bullets: list):
         for i in range(len(bullets)):
             dx = bullets[i].x - self.x
             dy = bullets[i].y - self.y
             if self.mask.overlap(bullets[i].mask, (dx, dy)) is not None:
-                return True, i
-        return False, -1
+                return i
+        return -1
 
+    # Move the enemy offscreen upon it being hit
     def hit(self):
         self.y = 2000
         self.alive = False

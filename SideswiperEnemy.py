@@ -14,6 +14,7 @@ class SideswiperEnemy(Enemy):
         self.num_hits = num_hits
         self.score_value = 1000
 
+    # Move the enemy across the screen
     def move(self):
         if self.alive:
             move_distance = self.direction * self.ship_speed
@@ -26,6 +27,7 @@ class SideswiperEnemy(Enemy):
             self.x += move_distance
             self.y += move_distance / 20
 
+    # Fire a bullet at random
     def random_fire(self):
         if random.randint(0, self.fire_freq) == 42:
             bullet_img = pygame.image.load("assets/sideswiper_bullet.png").convert()
@@ -33,15 +35,18 @@ class SideswiperEnemy(Enemy):
             bullet_img = pygame.transform.scale(bullet_img, (44, 44))
             self.bullets_fired.append(Bullet(self.x, self.y, bullet_img, self.bullet_speed))
 
+    # Move all the fired bullets (horizontally)
     def move_bullets(self):
         for bullet in self.bullets_fired:
             bullet.move_horizontal()
 
+    # Deduct from the number of hits the enemy can take
     def hit(self):
         pygame.mixer.Sound("assets/explosion.wav").play()
         self.num_hits -= 1
         if self.num_hits == 0:
             super().hit()
 
+    # Move the enemy offscreen
     def move_offscreen(self):
         self.x = 1000

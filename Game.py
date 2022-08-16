@@ -1,5 +1,5 @@
 from Level import *
-from Boss import Boss
+from BossEnemy import BossEnemy
 from ClassicEnemy import ClassicEnemy
 from SideswiperEnemy import *
 
@@ -34,24 +34,30 @@ class Game:
         ]
         self.current_score = 0
 
+    # Get the enemy setup of the current level
     def get_cur_enemy_setup(self):
         return self.levels[self.current_level - 1].get_enemy_setup()
 
+    # Return if the current level has been completed
     def is_current_level_completed(self):
         return self.levels[self.current_level - 1].is_completed()
 
+    # Move on to the next level
     def go_to_next_level(self, screen):
         self.current_level += 1
         next_level_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 32)
         next_level_text = next_level_font.render("Level " + str(self.current_level), True, (255, 255, 255))
         screen.blit(next_level_text, (285, 280))
 
+    # Return if the game has been completed (is not accurate mid-level)
     def is_completed(self):
-        return self.current_level == len(self.levels)  # and self.is_current_level_completed()
+        return self.current_level == len(self.levels)
 
+    # Adjust the score
     def increase_score(self, value):
         self.current_score += value
 
+    # Display the lives, level, and score on the screen
     def display_data(self, screen, num_lives):
         font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
         lives = font.render("Lives:" + str(num_lives), True, (255, 255, 255))
@@ -61,18 +67,21 @@ class Game:
         screen.blit(level, (150, 584))
         screen.blit(score, (300, 584))
 
+    # Display a message after the player dies
     @staticmethod
     def resuscitation_message(screen):
         get_ready_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
         get_ready_text = get_ready_font.render("Get Ready To Continue", True, (255, 255, 255))
         screen.blit(get_ready_text, (150, 280))
 
+    # Display a message when the player loses
     @staticmethod
     def game_over_message(screen):
         game_over_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
         game_over_text = game_over_font.render("GAME OVER", True, (255, 255, 255))
         screen.blit(game_over_text, (110, 250))
 
+    # Display a message when the player wins
     @staticmethod
     def game_completed_message(screen):
         game_completed_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
@@ -80,7 +89,7 @@ class Game:
         screen.blit(game_completed_text, (110, 250))
 
 
-# enemies are aligned in straight columns
+# Enemies are aligned in straight columns
 def enemy_setup_1(enemy_img, ship_speed, bullet_speed, fire_freq):
     line1 = [ClassicEnemy(x, 20, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
     line2 = [ClassicEnemy(x, 100, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
@@ -88,7 +97,7 @@ def enemy_setup_1(enemy_img, ship_speed, bullet_speed, fire_freq):
     return [line1, line2, line3]
 
 
-# in each row, enemies alternate columns
+# In each row, enemies alternate columns
 def enemy_setup_2(enemy_img, ship_speed, bullet_speed, fire_freq):
     line1 = [ClassicEnemy(x, 20, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
     line2 = [ClassicEnemy(x, 100, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(70, 726, 95)]
@@ -96,9 +105,9 @@ def enemy_setup_2(enemy_img, ship_speed, bullet_speed, fire_freq):
     return [line1, line2, line3]
 
 
-# two condensed rows of enemies with a boss on top
+# Two condensed rows of enemies with a boss on top
 def enemy_setup_3(enemy_img, ship_speed, bullet_speed, fire_freq):
-    line1 = [Boss(3)]
+    line1 = [BossEnemy(3)]
     line2 = [ClassicEnemy(x, 85, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
     line3 = [ClassicEnemy(x, 160, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
     return [line1, line2, line3]

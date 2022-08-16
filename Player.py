@@ -1,7 +1,7 @@
 import pygame.mixer
 
 from Bullet import *
-from SideswiperEnemy import SideswiperEnemy
+from Enemy import Enemy
 
 
 class Player:
@@ -24,9 +24,11 @@ class Player:
         self.bullets_fired = []
         self.mask = pygame.mask.from_surface(self.image)
 
+    # Display the player on the screen
     def display(self, screen):
         screen.blit(self.image, (self.x, self.y))
 
+    # Move the player along both axes
     def move(self, x_change, y_change, x_lower_limit=0, x_upper_limit=746, y_lower_limit=350, y_upper_limit=500):
         new_x = self.x + x_change
         new_y = self.y + y_change
@@ -35,6 +37,7 @@ class Player:
         if y_lower_limit <= new_y <= y_upper_limit:
             self.y = new_y
 
+    # Fire a bullet
     def fire(self):
         if len(self.bullets_fired) < 5:
             bullet_type = self.bullet_types[self.num_turrets - 1]
@@ -42,13 +45,16 @@ class Player:
             self.bullets_fired.append(Bullet(self.x + 11, self.y - 15, bullet_type, -bullet_speed))
             pygame.mixer.Sound("assets/laser.wav").play()
 
+    # Move all the fired bullets (upwards)
     def move_bullets(self):
         for bullet in self.bullets_fired:
             bullet.move_vertical()
 
+    # Remove all bullets that flew offscreen
     def remove_offscreen_bullets(self):
         self.bullets_fired = list(filter(lambda b: b.y >= 0, self.bullets_fired))
 
+    # Check if the player collided with an enemy bullet
     def collided_with_bullet(self, bullets: list):
         for i in range(len(bullets)):
             dx = bullets[i].x - self.x
@@ -57,18 +63,21 @@ class Player:
                 return True
         return False
 
-    def collided_with_enemy(self, enemy: SideswiperEnemy):
+    # Check if the player collided with an enemy
+    def collided_with_enemy(self, enemy: Enemy):
         dx = enemy.x - self.x
         dy = enemy.y - self.y
         if self.mask.overlap(enemy.mask, (dx, dy)) is not None:
             return True
         return False
 
+    # Deduct a life and move the player offscreen
     def lose_life(self):
         pygame.mixer.Sound("assets/explosion.wav").play(0, 800)
         self.y = 2000
         self.lives -= 1
 
+    # Reset the player to its default position
     def recenter(self):
         self.x = 370
         self.y = 480
