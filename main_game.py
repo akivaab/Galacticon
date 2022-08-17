@@ -1,6 +1,6 @@
 from Game import *
 from Player import *
-from ClassicEnemy import *
+from Enemies.Enemy import *
 
 # initialize
 pygame.init()
@@ -79,8 +79,8 @@ def main():
                     for bullet in enemy.bullets_fired:
                         bullet.display(screen)
 
-                    # check if the enemy shot the player
-                    if player.collided_with_bullet(enemy.bullets_fired):  # or is_collision(player, enemy)
+                    # check if the enemy shot or collided with the player
+                    if player.collided_with_bullet(enemy.bullets_fired) or player.collided_with_enemy(enemy):
                         player.lose_life()
                         level_running = False
 

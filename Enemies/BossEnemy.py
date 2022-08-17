@@ -1,6 +1,6 @@
 import random
-from Enemy import *
-from Bullet import *
+from Enemies.Enemy import *
+from Bullet import Bullet
 
 
 class BossEnemy(Enemy):

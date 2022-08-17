@@ -1,7 +1,8 @@
-from Level import *
-from BossEnemy import BossEnemy
-from ClassicEnemy import ClassicEnemy
-from SideswiperEnemy import *
+import pygame
+from Level import Level
+from Enemies.BossEnemy import BossEnemy
+from Enemies.ClassicEnemy import ClassicEnemy
+from Enemies.SideswiperEnemy import SideswiperEnemy
 
 
 class Game:
@@ -23,10 +24,10 @@ class Game:
             Level(enemy_setup_2(enemy_images[2], ship_speed=1.4, bullet_speed=2.5, fire_freq=325)),
             Level(enemy_setup_3(enemy_images[2], ship_speed=1.4, bullet_speed=2.5, fire_freq=325)),
             Level(enemy_setup_1(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
-            Level(enemy_setup_5(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
+            Level(enemy_setup_2(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
             Level(enemy_setup_3(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
             Level(enemy_setup_1(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
-            Level(enemy_setup_2(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
+            Level(enemy_setup_5(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
             Level(enemy_setup_6(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
             Level(enemy_setup_4(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
             Level(enemy_setup_2(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
@@ -138,4 +139,3 @@ def enemy_setup_6(enemy_img, ship_speed, bullet_speed, fire_freq):
     line3 = [ClassicEnemy(x, 160, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
     sideswiper = [SideswiperEnemy(2, 4)]
     return [line1, line2, line3, sideswiper]
-

@@ -1,6 +1,6 @@
 import random
 # from Bullet import *
-from Enemy import *
+from Enemies.Enemy import *
 
 
 class SideswiperEnemy(Enemy):

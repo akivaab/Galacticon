@@ -1,7 +1,5 @@
-import pygame.mixer
-
 from Bullet import *
-from Enemy import Enemy
+from Enemies.Enemy import Enemy
 
 
 class Player:
@@ -74,7 +72,7 @@ class Player:
     # Deduct a life and move the player offscreen
     def lose_life(self):
         pygame.mixer.Sound("assets/explosion.wav").play(0, 800)
-        self.y = 2000
+        self.y = 2500
         self.lives -= 1
 
     # Reset the player to its default position
