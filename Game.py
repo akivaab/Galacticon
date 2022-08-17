@@ -1,8 +1,14 @@
 import pygame
+import random
 from Level import Level
 from Enemies.BossEnemy import BossEnemy
 from Enemies.ClassicEnemy import ClassicEnemy
 from Enemies.SideswiperEnemy import SideswiperEnemy
+from Bonuses.Bonus import *
+from Bonuses.Plus import Plus
+from Bonuses.Heart import Heart
+from Bonuses.Two import Two
+from Bonuses.Three import Three
 
 
 class Game:
@@ -34,10 +40,32 @@ class Game:
             Level(enemy_setup_6(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
         ]
         self.current_score = 0
+        self.bonus_dropped = None
 
     # Get the enemy setup of the current level
     def get_cur_enemy_setup(self):
         return self.levels[self.current_level - 1].get_enemy_setup()
+
+    # Drop a bonus at random
+    def random_bonus_drop(self):
+        rand_bonus = random.randint(0, 1000000)
+        if rand_bonus in [0, 1, 2, 3] and self.bonus_dropped is None:
+            bonus_dict = {
+                0: Plus(random.randint(0, 736), 0),
+                1: Heart(random.randint(0, 736), 0),
+                2: Two(random.randint(0, 736), 0),
+                3: Three(random.randint(0, 736), 0)
+            }
+            self.bonus_dropped = bonus_dict[rand_bonus]
+
+    # Move the bonus down the screen
+    def move_bonus(self):
+        self.bonus_dropped.move_vertical()
+
+    # Remove the bonus if it flew offscreen
+    def remove_offscreen_bonus(self):
+        if self.bonus_dropped.y > 600:
+            self.bonus_dropped = None
 
     # Return if the current level has been completed
     def is_current_level_completed(self):

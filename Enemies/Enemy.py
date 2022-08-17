@@ -32,7 +32,7 @@ class Enemy:
 
     # Remove all bullets that flew offscreen
     def remove_offscreen_bullets(self):
-        self.bullets_fired = list(filter(lambda b: b.y < 800, self.bullets_fired))
+        self.bullets_fired = list(filter(lambda b: b.y < 600, self.bullets_fired))
 
     # Check if the enemy collided with the player's bullets
     def collided_with_bullet(self, bullets: list):
