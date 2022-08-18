@@ -37,10 +37,18 @@ class Player:
 
     # Fire a bullet
     def fire(self):
-        if len(self.bullets_fired) < 5:
+        if len(self.bullets_fired) < 5 * self.num_turrets:
             bullet_type = self.bullet_types[self.num_turrets - 1]
             bullet_speed = self.bullet_speeds[self.num_turrets - 1]
-            self.bullets_fired.append(Bullet(self.x + 11, self.y - 15, bullet_type, -bullet_speed))
+            if self.num_turrets == 1:
+                self.bullets_fired.append(Bullet(self.x + 11, self.y - 15, bullet_type, -bullet_speed))
+            elif self.num_turrets == 2:
+                self.bullets_fired.append(Bullet(self.x - 12, self.y + 20, bullet_type, -bullet_speed))
+                self.bullets_fired.append(Bullet(self.x + 35, self.y + 20, bullet_type, -bullet_speed))
+            elif self.num_turrets == 3:
+                self.bullets_fired.append(Bullet(self.x + 11, self.y - 15, bullet_type, -bullet_speed))
+                self.bullets_fired.append(Bullet(self.x - 12, self.y + 20, bullet_type, -bullet_speed))
+                self.bullets_fired.append(Bullet(self.x + 35, self.y + 20, bullet_type, -bullet_speed))
             pygame.mixer.Sound("assets/laser.wav").play()
 
     # Move all the fired bullets (upwards)

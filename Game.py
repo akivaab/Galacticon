@@ -1,10 +1,10 @@
 import pygame
 import random
+from math import floor
 from Level import Level
 from Enemies.BossEnemy import BossEnemy
 from Enemies.ClassicEnemy import ClassicEnemy
 from Enemies.SideswiperEnemy import SideswiperEnemy
-from Bonuses.Bonus import *
 from Bonuses.Plus import Plus
 from Bonuses.Heart import Heart
 from Bonuses.Two import Two
@@ -20,24 +20,24 @@ class Game:
             enemy_img.set_colorkey((0, 0, 0))
             enemy_images.append(pygame.transform.scale(enemy_img, (54, 54)))
         self.levels = [
-            Level(enemy_setup_1(enemy_images[0], ship_speed=1, bullet_speed=2, fire_freq=375)),
-            Level(enemy_setup_2(enemy_images[0], ship_speed=1, bullet_speed=2, fire_freq=375)),
-            Level(enemy_setup_3(enemy_images[0], ship_speed=1, bullet_speed=2, fire_freq=375)),
-            Level(enemy_setup_1(enemy_images[1], ship_speed=1.2, bullet_speed=2.25, fire_freq=350)),
-            Level(enemy_setup_2(enemy_images[1], ship_speed=1.2, bullet_speed=2.25, fire_freq=350)),
-            Level(enemy_setup_3(enemy_images[1], ship_speed=1.2, bullet_speed=2.25, fire_freq=350)),
-            Level(enemy_setup_4(enemy_images[2], ship_speed=1.4, bullet_speed=2.5, fire_freq=325)),
-            Level(enemy_setup_2(enemy_images[2], ship_speed=1.4, bullet_speed=2.5, fire_freq=325)),
-            Level(enemy_setup_3(enemy_images[2], ship_speed=1.4, bullet_speed=2.5, fire_freq=325)),
-            Level(enemy_setup_1(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
-            Level(enemy_setup_2(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
-            Level(enemy_setup_3(enemy_images[3], ship_speed=1.6, bullet_speed=2.75, fire_freq=300)),
-            Level(enemy_setup_1(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
-            Level(enemy_setup_5(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
-            Level(enemy_setup_6(enemy_images[4], ship_speed=1.8, bullet_speed=3, fire_freq=275)),
-            Level(enemy_setup_4(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
-            Level(enemy_setup_2(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
-            Level(enemy_setup_6(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
+            Level(enemy_setup_1(enemy_images[0], ship_speed=1, bullet_speed=2.25, fire_freq=350)),
+            Level(enemy_setup_2(enemy_images[0], ship_speed=1, bullet_speed=2.25, fire_freq=350)),
+            Level(enemy_setup_3(enemy_images[0], ship_speed=1, bullet_speed=2.25, fire_freq=350)),
+            Level(enemy_setup_1(enemy_images[1], ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
+            Level(enemy_setup_2(enemy_images[1], ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
+            Level(enemy_setup_3(enemy_images[1], ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
+            Level(enemy_setup_4(enemy_images[2], ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
+            Level(enemy_setup_2(enemy_images[2], ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
+            Level(enemy_setup_3(enemy_images[2], ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
+            Level(enemy_setup_1(enemy_images[3], ship_speed=1.6, bullet_speed=3, fire_freq=275)),
+            Level(enemy_setup_2(enemy_images[3], ship_speed=1.6, bullet_speed=3, fire_freq=275)),
+            Level(enemy_setup_3(enemy_images[3], ship_speed=1.6, bullet_speed=3, fire_freq=275)),
+            Level(enemy_setup_1(enemy_images[4], ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
+            Level(enemy_setup_5(enemy_images[4], ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
+            Level(enemy_setup_6(enemy_images[4], ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
+            Level(enemy_setup_4(enemy_images[5], ship_speed=2, bullet_speed=3.5, fire_freq=225)),
+            Level(enemy_setup_2(enemy_images[5], ship_speed=2, bullet_speed=3.5, fire_freq=225)),
+            Level(enemy_setup_6(enemy_images[5], ship_speed=2, bullet_speed=3.5, fire_freq=225)),
         ]
         self.current_score = 0
         self.bonuses_dropped = []
@@ -48,8 +48,9 @@ class Game:
 
     # Drop bonuses at random
     def random_bonus_drop(self):
-        rand_bonus = random.randint(0, 3000)
-        if rand_bonus <= min(int(self.current_level / 5), 3):
+        game_stage = floor(self.current_level / 5)
+        rand_bonus = random.randint(0, 3000 + (game_stage * 2000))
+        if rand_bonus <= min(game_stage, 3):
             bonus_dict = {
                 0: Plus(random.randint(0, 736), 0),
                 1: Heart(random.randint(0, 736), 0),
@@ -96,9 +97,9 @@ class Game:
         next_level_text = next_level_font.render("Level " + str(self.current_level), True, (255, 255, 255))
         screen.blit(next_level_text, (285, 280))
 
-    # Return if the game has been completed (is not accurate mid-level)
+    # Return if the game has been completed
     def is_completed(self):
-        return self.current_level == len(self.levels)
+        return self.current_level == len(self.levels) and self.is_current_level_completed()
 
     # Adjust the score
     def increase_score(self, value):
@@ -154,7 +155,7 @@ def enemy_setup_2(enemy_img, ship_speed, bullet_speed, fire_freq):
 
 # Two condensed rows of enemies with a boss on top
 def enemy_setup_3(enemy_img, ship_speed, bullet_speed, fire_freq):
-    line1 = [BossEnemy(3)]
+    line1 = [BossEnemy(5)]
     line2 = [ClassicEnemy(x, 85, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
     line3 = [ClassicEnemy(x, 160, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
     return [line1, line2, line3]
@@ -174,14 +175,14 @@ def enemy_setup_5(enemy_img, ship_speed, bullet_speed, fire_freq):
     line1 = [ClassicEnemy(x, 20, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
     line2 = [ClassicEnemy(x, 100, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(70, 726, 95)]
     line3 = [ClassicEnemy(x, 180, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(15, 736, 95)]
-    sideswiper = [SideswiperEnemy(2, 4)]
+    sideswiper = [SideswiperEnemy(3, 5)]
     return [line1, line2, line3, sideswiper]
 
 
 # Two condensed rows of enemies with a boss on top, plus there is a sideswiper
 def enemy_setup_6(enemy_img, ship_speed, bullet_speed, fire_freq):
-    line1 = [BossEnemy(3)]
+    line1 = [BossEnemy(10)]
     line2 = [ClassicEnemy(x, 85, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
     line3 = [ClassicEnemy(x, 160, enemy_img, ship_speed, bullet_speed, fire_freq) for x in range(45, 690, 60)]
-    sideswiper = [SideswiperEnemy(2, 4)]
+    sideswiper = [SideswiperEnemy(3, 5)]
     return [line1, line2, line3, sideswiper]

@@ -4,7 +4,7 @@ from Bullet import Bullet
 
 
 class BossEnemy(Enemy):
-    def __init__(self, num_hits, ship_speed=1.5, bullet_speed=4, fire_freq=250):
+    def __init__(self, num_hits, ship_speed=2.5, bullet_speed=4, fire_freq=225):
         boss_img = pygame.image.load("assets/boss.png").convert()
         boss_img.set_colorkey((0, 0, 0))
         super().__init__(320, 10, boss_img, ship_speed, bullet_speed, fire_freq)
