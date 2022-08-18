@@ -40,32 +40,50 @@ class Game:
             Level(enemy_setup_6(enemy_images[5], ship_speed=2, bullet_speed=3.25, fire_freq=250)),
         ]
         self.current_score = 0
-        self.bonus_dropped = None
+        self.bonuses_dropped = []
 
     # Get the enemy setup of the current level
     def get_cur_enemy_setup(self):
         return self.levels[self.current_level - 1].get_enemy_setup()
 
-    # Drop a bonus at random
+    # Drop bonuses at random
     def random_bonus_drop(self):
-        rand_bonus = random.randint(0, 1000000)
-        if rand_bonus in [0, 1, 2, 3] and self.bonus_dropped is None:
+        rand_bonus = random.randint(0, 3000)
+        if rand_bonus <= min(int(self.current_level / 5), 3):
             bonus_dict = {
                 0: Plus(random.randint(0, 736), 0),
                 1: Heart(random.randint(0, 736), 0),
                 2: Two(random.randint(0, 736), 0),
                 3: Three(random.randint(0, 736), 0)
             }
-            self.bonus_dropped = bonus_dict[rand_bonus]
+            self.bonuses_dropped.append(bonus_dict[rand_bonus])
 
-    # Move the bonus down the screen
-    def move_bonus(self):
-        self.bonus_dropped.move_vertical()
+    # Move the bonuses down the screen
+    def move_bonuses(self):
+        for bonus in self.bonuses_dropped:
+            bonus.move_vertical()
 
-    # Remove the bonus if it flew offscreen
-    def remove_offscreen_bonus(self):
-        if self.bonus_dropped.y > 600:
-            self.bonus_dropped = None
+    # Remove the bonuses that flew offscreen
+    def remove_offscreen_bonuses(self):
+        self.bonuses_dropped = list(filter(lambda b: b.y < 600, self.bonuses_dropped))
+
+    # Check if the player received a bonus
+    def received_bonus(self, player):
+        for i in range(len(self.bonuses_dropped)):
+            bonus = self.bonuses_dropped[i]
+            dx = bonus.x - player.x
+            dy = bonus.y - player.y
+            if player.mask.overlap(bonus.mask, (dx, dy)) is not None:
+                self.bonuses_dropped.pop(i)
+                if isinstance(bonus, Plus):
+                    self.increase_score(2500)
+                elif isinstance(bonus, Heart):
+                    player.lives += 1
+                elif isinstance(bonus, Two):
+                    player.num_turrets = 2
+                elif isinstance(bonus, Three):
+                    player.num_turrets = 3
+                return
 
     # Return if the current level has been completed
     def is_current_level_completed(self):

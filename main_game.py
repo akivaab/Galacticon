@@ -59,14 +59,23 @@ def main():
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                         player_y_change = 0
 
-            # move the player
+            # move and display the player
             player.move(player_x_change, player_y_change)
+            player.display(screen)
 
             # move and display the player's bullets
             player.move_bullets()
             player.remove_offscreen_bullets()
             for bullet in player.bullets_fired:
                 bullet.display(screen)
+
+            # move and check if the player caught (then display) the bonuses
+            game.random_bonus_drop()
+            game.move_bonuses()
+            game.remove_offscreen_bonuses()
+            game.received_bonus(player)
+            for bonus in game.bonuses_dropped:
+                bonus.display(screen)
 
             # for each enemy
             for enemy_line in enemies_grid:
@@ -96,9 +105,6 @@ def main():
 
                     # display the enemy
                     enemy.display(screen)
-
-            # display the player
-            player.display(screen)
 
             # update the game screen display
             game.display_data(screen, player.lives)
