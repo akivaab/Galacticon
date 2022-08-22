@@ -1,6 +1,7 @@
 from Game import *
 from Player import *
 from Enemies.Enemy import *
+from Enemies.SideswiperEnemy import SideswiperEnemy
 
 # initialize
 pygame.init()

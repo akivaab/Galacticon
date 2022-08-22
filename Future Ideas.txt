@@ -1,0 +1,4 @@
+level with (harder to hit) shrunken enemies
+enemies that shoot laser lines instead of round bullets
+FranticEnemy that moves in a random pattern (inherit from ClassicEnemy)
+Splicer, comes from below, aims squiggly laserbeam at player, splits screen into two parts
