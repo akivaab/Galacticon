@@ -2,6 +2,7 @@ from Game import *
 from Player import *
 from Enemies.Enemy import *
 from Enemies.SideswiperEnemy import SideswiperEnemy
+from Enemies.FranticEnemy import FranticEnemy
 
 # initialize
 pygame.init()
@@ -106,6 +107,10 @@ def main():
 
                     # display the enemy
                     enemy.display(screen)
+
+                    # trigger FranticEnemies once a number of enemies have been defeated
+                    if isinstance(enemy, FranticEnemy) and game.get_cur_level().get_num_enemies_defeated() > 8:
+                        enemy.is_frantic = True
 
             # update the game screen display
             game.display_data(screen, player.lives)

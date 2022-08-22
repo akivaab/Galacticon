@@ -36,9 +36,9 @@ class Game:
                 Level.enemy_setup_2(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
             Level(
                 Level.enemy_setup_3(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
-            Level(Level.enemy_setup_1(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
-            Level(Level.enemy_setup_2(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
-            Level(Level.enemy_setup_3(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
+            Level(Level.enemy_setup_7(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
+            Level(Level.enemy_setup_8(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
+            Level(Level.enemy_setup_9(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
             Level(
                 Level.enemy_setup_1(enemy_images[4], bullet1_image, ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
             Level(
@@ -51,6 +51,10 @@ class Game:
         ]
         self.current_score = 0
         self.bonuses_dropped = []
+
+    # Get the current level
+    def get_cur_level(self):
+        return self.levels[self.current_level - 1]
 
     # Get the enemy setup of the current level
     def get_cur_enemy_setup(self):
