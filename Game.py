@@ -16,25 +16,38 @@ class Game:
             enemy_img = pygame.image.load("assets/enemy" + str(i) + ".png").convert()
             enemy_img.set_colorkey((0, 0, 0))
             enemy_images.append(pygame.transform.scale(enemy_img, (54, 54)))
+
+        bullet1_image = pygame.image.load("assets/enemy_bullet1.png").convert()
+        bullet1_image.set_colorkey((0, 0, 0))
+        bullet1_image = pygame.transform.scale(bullet1_image, (40, 40))
+        bullet2_image = pygame.image.load("assets/enemy_bullet2.png").convert()
+        bullet2_image.set_colorkey((0, 0, 0))
+
         self.levels = [
-            Level(Level.enemy_setup_1(enemy_images[0], ship_speed=1, bullet_speed=2.25, fire_freq=350)),
-            Level(Level.enemy_setup_2(enemy_images[0], ship_speed=1, bullet_speed=2.25, fire_freq=350)),
-            Level(Level.enemy_setup_3(enemy_images[0], ship_speed=1, bullet_speed=2.25, fire_freq=350)),
-            Level(Level.enemy_setup_1(enemy_images[1], ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
-            Level(Level.enemy_setup_2(enemy_images[1], ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
-            Level(Level.enemy_setup_3(enemy_images[1], ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
-            Level(Level.enemy_setup_4(enemy_images[2], ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
-            Level(Level.enemy_setup_2(enemy_images[2], ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
-            Level(Level.enemy_setup_3(enemy_images[2], ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
-            Level(Level.enemy_setup_1(enemy_images[3], ship_speed=1.6, bullet_speed=3, fire_freq=275)),
-            Level(Level.enemy_setup_2(enemy_images[3], ship_speed=1.6, bullet_speed=3, fire_freq=275)),
-            Level(Level.enemy_setup_3(enemy_images[3], ship_speed=1.6, bullet_speed=3, fire_freq=275)),
-            Level(Level.enemy_setup_1(enemy_images[4], ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
-            Level(Level.enemy_setup_5(enemy_images[4], ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
-            Level(Level.enemy_setup_6(enemy_images[4], ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
-            Level(Level.enemy_setup_4(enemy_images[5], ship_speed=2, bullet_speed=3.5, fire_freq=225)),
-            Level(Level.enemy_setup_2(enemy_images[5], ship_speed=2, bullet_speed=3.5, fire_freq=225)),
-            Level(Level.enemy_setup_6(enemy_images[5], ship_speed=2, bullet_speed=3.5, fire_freq=225)),
+            Level(Level.enemy_setup_1(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25, fire_freq=350)),
+            Level(Level.enemy_setup_2(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25, fire_freq=350)),
+            Level(Level.enemy_setup_3(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25, fire_freq=350)),
+            Level(Level.enemy_setup_1(enemy_images[1], bullet1_image, ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
+            Level(Level.enemy_setup_2(enemy_images[1], bullet1_image, ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
+            Level(Level.enemy_setup_3(enemy_images[1], bullet1_image, ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
+            Level(
+                Level.enemy_setup_4(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
+            Level(
+                Level.enemy_setup_2(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
+            Level(
+                Level.enemy_setup_3(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
+            Level(Level.enemy_setup_1(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
+            Level(Level.enemy_setup_2(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
+            Level(Level.enemy_setup_3(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
+            Level(
+                Level.enemy_setup_1(enemy_images[4], bullet1_image, ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
+            Level(
+                Level.enemy_setup_5(enemy_images[4], bullet1_image, ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
+            Level(
+                Level.enemy_setup_6(enemy_images[4], bullet1_image, ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
+            Level(Level.enemy_setup_4(enemy_images[5], bullet1_image, ship_speed=2, bullet_speed=3.5, fire_freq=225)),
+            Level(Level.enemy_setup_2(enemy_images[5], bullet1_image, ship_speed=2, bullet_speed=3.5, fire_freq=225)),
+            Level(Level.enemy_setup_6(enemy_images[5], bullet1_image, ship_speed=2, bullet_speed=3.5, fire_freq=225)),
         ]
         self.current_score = 0
         self.bonuses_dropped = []

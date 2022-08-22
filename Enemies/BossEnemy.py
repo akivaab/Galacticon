@@ -23,7 +23,7 @@ class BossEnemy(Enemy):
     # Fire 3 bullets at random
     def random_fire(self):
         if random.randint(0, self.fire_freq) == 42:
-            bullet_img = pygame.image.load("assets/enemy_bullet.png").convert()
+            bullet_img = pygame.image.load("assets/enemy_bullet1.png").convert()
             bullet_img.set_colorkey((0, 0, 0))
             bullet_img = pygame.transform.scale(bullet_img, (52, 52))
             self.bullets_fired.append(Bullet(self.x - 14, self.y + 32, bullet_img, self.bullet_speed))
