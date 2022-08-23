@@ -112,8 +112,15 @@ def main():
                     if isinstance(enemy, FranticEnemy) and game.get_cur_level().get_num_enemies_defeated() > 8:
                         enemy.is_frantic = True
 
-            # (potentially) deploy and display the splicer
+            # deploy the splicer
             game.random_splicer_deployment(player.x)
+
+            # check if the player collided with the splicer's laserbeam
+            if player.collided_with_bullet(game.splicer.laserbeam_components):
+                player.lose_life()
+                level_running = False
+
+            # display the splicer and it's laserbeam
             for laserbeam in game.splicer.laserbeam_components:
                 laserbeam.display(screen)
             game.splicer.display(screen)
@@ -138,6 +145,7 @@ def main():
                 if isinstance(enemy, SideswiperEnemy):
                     enemy.move_offscreen()
         game.splicer.move_offscreen()
+        game.splicer_deployed = False
 
         if player.lives == 0:  # game over
             Game.game_over_message(screen)

@@ -6,7 +6,7 @@ from Bonuses.Plus import Plus
 from Bonuses.Heart import Heart
 from Bonuses.Two import Two
 from Bonuses.Three import Three
-from Enemies.Splicer import *
+from Enemies.Splicer import Splicer
 
 
 class Game:
@@ -87,12 +87,13 @@ class Game:
 
     # Check if the player received a bonus
     def received_bonus(self, player):
+        remove_bonus_indexes = []
         for i in range(len(self.bonuses_dropped)):
             bonus = self.bonuses_dropped[i]
             dx = bonus.x - player.x
             dy = bonus.y - player.y
             if player.mask.overlap(bonus.mask, (dx, dy)) is not None:
-                self.bonuses_dropped.pop(i)
+                remove_bonus_indexes.append(i)
                 bonus_score = 0
                 if isinstance(bonus, Plus):
                     bonus_score = 2500
@@ -106,6 +107,8 @@ class Game:
                     player.num_turrets = 3
                     bonus_score = 250
                 self.increase_score(bonus_score)
+        for i in remove_bonus_indexes:
+            self.bonuses_dropped.pop(i)
 
     # Randomly deploy the splicer
     def random_splicer_deployment(self, player_x):

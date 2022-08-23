@@ -32,7 +32,7 @@ class Splicer:
             self.step += 1
         elif self.step == 2:  # move towards the player
             if self.y > 540:
-                self.y -= 5
+                self.y -= 1
             else:
                 self.step += 1
                 self.laser_end_time = datetime.datetime.now() + datetime.timedelta(seconds=3.5)
@@ -49,7 +49,7 @@ class Splicer:
             self.continuous_laser_fire()
         elif self.step == 5:  # move away from player
             if self.y < 610:
-                self.y += 5
+                self.y += 1
             else:
                 self.step = 1
                 return True
