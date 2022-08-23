@@ -6,11 +6,12 @@ from Bonuses.Plus import Plus
 from Bonuses.Heart import Heart
 from Bonuses.Two import Two
 from Bonuses.Three import Three
+from Enemies.Splicer import *
 
 
 class Game:
     def __init__(self):
-        self.current_level = 1
+        self.current_level_num = 1
         enemy_images = []
         for i in range(1, 7):
             enemy_img = pygame.image.load("assets/enemy" + str(i) + ".png").convert()
@@ -51,18 +52,20 @@ class Game:
         ]
         self.current_score = 0
         self.bonuses_dropped = []
+        self.splicer = Splicer()
+        self.splicer_deployed = False
 
     # Get the current level
     def get_cur_level(self):
-        return self.levels[self.current_level - 1]
+        return self.levels[self.current_level_num - 1]
 
     # Get the enemy setup of the current level
     def get_cur_enemy_setup(self):
-        return self.levels[self.current_level - 1].get_enemy_setup()
+        return self.levels[self.current_level_num - 1].get_enemy_setup()
 
     # Drop bonuses at random
     def random_bonus_drop(self):
-        game_stage = floor(self.current_level / 5)
+        game_stage = floor(self.current_level_num / 5)
         rand_bonus = random.randint(0, 3000 + (game_stage * 2000))
         if rand_bonus <= min(game_stage, 3):
             bonus_dict = {
@@ -103,22 +106,29 @@ class Game:
                     player.num_turrets = 3
                     bonus_score = 250
                 self.increase_score(bonus_score)
-                return
+
+    # Randomly deploy the splicer
+    def random_splicer_deployment(self, player_x):
+        if self.current_level_num >= 10 and not self.splicer_deployed:
+            self.splicer_deployed = True if random.randint(0, 1250) == 27 else False
+        elif self.splicer_deployed:
+            deployment_complete = self.splicer.perform_action(player_x)
+            self.splicer_deployed = not deployment_complete
 
     # Return if the current level has been completed
     def is_current_level_completed(self):
-        return self.levels[self.current_level - 1].is_completed()
+        return self.levels[self.current_level_num - 1].is_completed()
 
     # Move on to the next level
     def go_to_next_level(self, screen):
-        self.current_level += 1
+        self.current_level_num += 1
         next_level_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 32)
-        next_level_text = next_level_font.render("Level " + str(self.current_level), True, (255, 255, 255))
+        next_level_text = next_level_font.render("Level " + str(self.current_level_num), True, (255, 255, 255))
         screen.blit(next_level_text, (285, 280))
 
     # Return if the game has been completed
     def is_completed(self):
-        return self.current_level == len(self.levels) and self.is_current_level_completed()
+        return self.current_level_num == len(self.levels) and self.is_current_level_completed()
 
     # Adjust the score
     def increase_score(self, value):
@@ -128,7 +138,7 @@ class Game:
     def display_data(self, screen, num_lives):
         font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
         lives = font.render("Lives:" + str(num_lives), True, (255, 255, 255))
-        level = font.render("Level:" + str(self.current_level), True, (255, 255, 255))
+        level = font.render("Level:" + str(self.current_level_num), True, (255, 255, 255))
         score = font.render("Score:" + str(self.current_score), True, (255, 255, 255))
         screen.blit(lives, (0, 584))
         screen.blit(level, (150, 584))

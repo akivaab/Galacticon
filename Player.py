@@ -27,7 +27,7 @@ class Player:
         screen.blit(self.image, (self.x, self.y))
 
     # Move the player along both axes
-    def move(self, x_change, y_change, x_lower_limit=0, x_upper_limit=746, y_lower_limit=350, y_upper_limit=500):
+    def move(self, x_change, y_change, x_lower_limit=0, x_upper_limit=746, y_lower_limit=340, y_upper_limit=490):
         new_x = self.x + x_change
         new_y = self.y + y_change
         if x_lower_limit <= new_x <= x_upper_limit:

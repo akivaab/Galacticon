@@ -112,6 +112,12 @@ def main():
                     if isinstance(enemy, FranticEnemy) and game.get_cur_level().get_num_enemies_defeated() > 8:
                         enemy.is_frantic = True
 
+            # (potentially) deploy and display the splicer
+            game.random_splicer_deployment(player.x)
+            for laserbeam in game.splicer.laserbeam_components:
+                laserbeam.display(screen)
+            game.splicer.display(screen)
+
             # update the game screen display
             game.display_data(screen, player.lives)
             clock.tick(75)
@@ -124,13 +130,14 @@ def main():
 
         # end level
 
-        # clear bullets from screen
+        # clear bullets and special enemies from screen
         player.bullets_fired.clear()
         for enemy_line in enemies_grid:
             for enemy in enemy_line:
                 enemy.bullets_fired.clear()
                 if isinstance(enemy, SideswiperEnemy):
                     enemy.move_offscreen()
+        game.splicer.move_offscreen()
 
         if player.lives == 0:  # game over
             Game.game_over_message(screen)
