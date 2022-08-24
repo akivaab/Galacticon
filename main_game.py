@@ -1,3 +1,4 @@
+from itertools import cycle
 from Game import *
 from Player import *
 from Enemies.Enemy import *
@@ -20,7 +21,36 @@ game = Game()
 
 
 def begin_screen():
-    pass
+    galacticon_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
+    colors = [(62, 216, 18), (11, 50, 253)]
+    iterator = cycle(range(2))
+
+    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
+    menu_text = menu_font.render("Press ENTER to play!", True, (255, 255, 255))
+    screen.blit(menu_text, (240, 300))
+
+    begin_screen_running = True
+    while begin_screen_running:
+        # title colors
+        next(iterator)
+        galacticon_text_1 = galacticon_font.render("G L C I O", True, colors[next(iterator)])
+        galacticon_text_2 = galacticon_font.render("A A T C N", True, colors[next(iterator)])
+        screen.blit(galacticon_text_1, (80, 100))
+        screen.blit(galacticon_text_2, (144, 100))
+
+        # keyboard events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    galacticon_text_3 = galacticon_font.render("GALACTICON", True, (214, 0, 0))
+                    screen.blit(galacticon_text_3, (80, 100))
+                    begin_screen_running = False
+
+        pygame.display.update()
+        clock.tick(3)
 
 
 def play_game():
@@ -45,8 +75,8 @@ def play_game():
             # keyboard events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    level_running = False
-                    game_running = False
+                    pygame.quit()
+                    exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         player_x_change = -3
