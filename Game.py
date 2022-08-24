@@ -139,13 +139,13 @@ class Game:
 
     # Display the lives, level, and score on the screen
     def display_data(self, screen, num_lives):
-        font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
+        font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 12)
         lives = font.render("Lives:" + str(num_lives), True, (255, 255, 255))
         level = font.render("Level:" + str(self.current_level_num), True, (255, 255, 255))
         score = font.render("Score:" + str(self.current_score), True, (255, 255, 255))
-        screen.blit(lives, (0, 584))
-        screen.blit(level, (150, 584))
-        screen.blit(score, (300, 584))
+        screen.blit(lives, (0, 588))
+        screen.blit(level, (100, 588))
+        screen.blit(score, (210, 588))
 
     # Display a message after the player dies
     @staticmethod

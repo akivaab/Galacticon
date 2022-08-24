@@ -16,14 +16,18 @@ icon = pygame.image.load("assets/logo.png").convert_alpha()
 pygame.display.set_icon(icon)
 
 clock = pygame.time.Clock()
-
-# start game music
-pygame.mixer.music.load("assets/deltarune_knock_you_down.wav")
-pygame.mixer.music.play(-1)
+game = Game()
 
 
-def main():
-    game = Game()
+def begin_screen():
+    pass
+
+
+def play_game():
+    # start game music
+    pygame.mixer.music.load("assets/deltarune_knock_you_down.wav")
+    pygame.mixer.music.play(-1)
+
     enemies_grid = game.get_cur_enemy_setup()
     player = Player()
 
@@ -41,7 +45,6 @@ def main():
             # keyboard events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.display.set_caption("You DARE quit Galacticon?!! YOU SHALL REGRET THIS!!")
                     level_running = False
                     game_running = False
                 if event.type == pygame.KEYDOWN:
@@ -166,4 +169,11 @@ def main():
     # end game
 
 
-main()
+def end_screen():
+    pass
+
+
+if __name__ == "__main__":
+    begin_screen()
+    play_game()
+    end_screen()
