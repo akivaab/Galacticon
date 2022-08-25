@@ -1,4 +1,7 @@
 from itertools import cycle
+
+import pygame.transform
+
 from Game import *
 from Player import *
 from Enemies.Enemy import *
@@ -21,13 +24,22 @@ game = Game()
 
 
 def begin_screen():
+    pygame.mixer.music.load("assets/undertale_dating_tense.wav")
+    pygame.mixer.music.play(-1)
+
     galacticon_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
     colors = [(62, 216, 18), (11, 50, 253)]
     iterator = cycle(range(2))
 
     menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
     menu_text = menu_font.render("Press ENTER to play!", True, (255, 255, 255))
-    screen.blit(menu_text, (240, 300))
+    screen.blit(menu_text, (240, 200))
+    menu_text = menu_font.render("Press A for instructions!", True, (255, 255, 255))
+    screen.blit(menu_text, (200, 230))
+    menu_text = menu_font.render("Press S to see the scoreboard!", True, (255, 255, 255))
+    screen.blit(menu_text, (170, 260))
+    menu_text = menu_font.render("Press U for no reason whatsoever!", True, (255, 255, 255))
+    screen.blit(menu_text, (150, 290))
 
     begin_screen_running = True
     while begin_screen_running:
@@ -35,8 +47,8 @@ def begin_screen():
         next(iterator)
         galacticon_text_1 = galacticon_font.render("G L C I O", True, colors[next(iterator)])
         galacticon_text_2 = galacticon_font.render("A A T C N", True, colors[next(iterator)])
-        screen.blit(galacticon_text_1, (80, 100))
-        screen.blit(galacticon_text_2, (144, 100))
+        screen.blit(galacticon_text_1, (80, 80))
+        screen.blit(galacticon_text_2, (144, 80))
 
         # keyboard events
         for event in pygame.event.get():
@@ -48,9 +60,27 @@ def begin_screen():
                     galacticon_text_3 = galacticon_font.render("GALACTICON", True, (214, 0, 0))
                     screen.blit(galacticon_text_3, (80, 100))
                     begin_screen_running = False
+                if event.key == pygame.K_a:
+                    arrow_keys_img = pygame.image.load("assets/arrow_keys.png").convert()
+                    arrow_keys_img.set_colorkey((0, 0, 0))
+                    screen.blit(arrow_keys_img, (50, 380))
+                    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 12)
+                    arrow_keys_text = menu_font.render("press and hold the", True, (255, 255, 255))
+                    screen.blit(arrow_keys_text, (130, 380))
+                    arrow_keys_text = menu_font.render("arrow keys to move", True, (255, 255, 255))
+                    screen.blit(arrow_keys_text, (130, 400))
+
+                    space_bar_img = pygame.image.load("assets/space_bar.png").convert()
+                    space_bar_img.set_colorkey((0, 0, 0))
+                    space_bar_img = pygame.transform.scale(space_bar_img, (128, 32))
+                    screen.blit(space_bar_img, (40, 450))
+                    arrow_keys_text = menu_font.render("press the space", True, (255, 255, 255))
+                    screen.blit(arrow_keys_text, (180, 450))
+                    arrow_keys_text = menu_font.render("bar to fire", True, (255, 255, 255))
+                    screen.blit(arrow_keys_text, (180, 470))
 
         pygame.display.update()
-        clock.tick(3)
+        clock.tick(75)
 
 
 def play_game():
