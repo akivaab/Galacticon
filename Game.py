@@ -13,7 +13,7 @@ class Game:
     def __init__(self):
         self.current_level_num = 1
         enemy_images = []
-        for i in range(1, 7):
+        for i in range(1, 9):
             enemy_img = pygame.image.load("assets/enemy" + str(i) + ".png").convert()
             enemy_img.set_colorkey((0, 0, 0))
             enemy_images.append(pygame.transform.scale(enemy_img, (54, 54)))
@@ -25,30 +25,57 @@ class Game:
         bullet2_image.set_colorkey((0, 0, 0))
 
         self.levels = [
-            Level(Level.enemy_setup_1(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25, fire_freq=350)),
-            Level(Level.enemy_setup_2(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25, fire_freq=350)),
-            Level(Level.enemy_setup_3(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25, fire_freq=350)),
-            Level(Level.enemy_setup_1(enemy_images[1], bullet1_image, ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
-            Level(Level.enemy_setup_2(enemy_images[1], bullet1_image, ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
-            Level(Level.enemy_setup_3(enemy_images[1], bullet1_image, ship_speed=1.2, bullet_speed=2.5, fire_freq=325)),
-            Level(
-                Level.enemy_setup_4(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
-            Level(
-                Level.enemy_setup_2(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
-            Level(
-                Level.enemy_setup_3(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75, fire_freq=300)),
-            Level(Level.enemy_setup_7(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
-            Level(Level.enemy_setup_8(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
-            Level(Level.enemy_setup_9(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3, fire_freq=275)),
-            Level(
-                Level.enemy_setup_1(enemy_images[4], bullet1_image, ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
-            Level(
-                Level.enemy_setup_5(enemy_images[4], bullet1_image, ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
-            Level(
-                Level.enemy_setup_6(enemy_images[4], bullet1_image, ship_speed=1.8, bullet_speed=3.25, fire_freq=250)),
-            Level(Level.enemy_setup_4(enemy_images[5], bullet1_image, ship_speed=2, bullet_speed=3.5, fire_freq=225)),
-            Level(Level.enemy_setup_2(enemy_images[5], bullet1_image, ship_speed=2, bullet_speed=3.5, fire_freq=225)),
-            Level(Level.enemy_setup_6(enemy_images[5], bullet1_image, ship_speed=2, bullet_speed=3.5, fire_freq=225)),
+            Level(Level.enemy_setup_classic_rows(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25,
+                                                 fire_freq=350)),
+            Level(Level.enemy_setup_classic_alt(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25,
+                                                fire_freq=350)),
+            Level(Level.enemy_setup_classic_boss(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25,
+                                                 fire_freq=350)),
+            Level(Level.enemy_setup_classic_rows_sw(enemy_images[1], bullet1_image, ship_speed=1.2, bullet_speed=2.5,
+                                                    fire_freq=325)),
+            Level(Level.enemy_setup_classic_alt_sw(enemy_images[1], bullet1_image, ship_speed=1.2, bullet_speed=2.5,
+                                                   fire_freq=325)),
+            Level(Level.enemy_setup_classic_boss_sw(enemy_images[1], bullet1_image, ship_speed=1.2, bullet_speed=2.5,
+                                                    fire_freq=325)),
+            Level(Level.enemy_setup_frantic_rows(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75,
+                                                 fire_freq=300)),
+            Level(Level.enemy_setup_frantic_alt(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75,
+                                                fire_freq=300)),
+            Level(Level.enemy_setup_frantic_boss(enemy_images[2], bullet1_image, ship_speed=1.4, bullet_speed=2.75,
+                                                 fire_freq=300)),
+            Level(Level.enemy_setup_frantic_rows_sw(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3,
+                                                    fire_freq=275)),
+            Level(Level.enemy_setup_frantic_alt_sw(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3,
+                                                   fire_freq=275)),
+            Level(Level.enemy_setup_frantic_boss_sw(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3,
+                                                    fire_freq=275)),
+
+            Level(Level.enemy_setup_boss_sw()),
+
+            Level(Level.enemy_setup_classic_rows(enemy_images[4], bullet2_image, ship_speed=1.8, bullet_speed=3.25,
+                                                 fire_freq=250)),
+            Level(Level.enemy_setup_classic_alt(enemy_images[4], bullet2_image, ship_speed=1.8, bullet_speed=3.25,
+                                                fire_freq=250)),
+            Level(Level.enemy_setup_classic_boss(enemy_images[4], bullet2_image, ship_speed=1.8, bullet_speed=3.25,
+                                                 fire_freq=250)),
+            Level(Level.enemy_setup_classic_rows_sw(enemy_images[5], bullet2_image, ship_speed=2, bullet_speed=3.5,
+                                                    fire_freq=225)),
+            Level(Level.enemy_setup_classic_alt_sw(enemy_images[5], bullet2_image, ship_speed=2, bullet_speed=3.5,
+                                                   fire_freq=225)),
+            Level(Level.enemy_setup_classic_boss_sw(enemy_images[5], bullet2_image, ship_speed=2, bullet_speed=3.5,
+                                                    fire_freq=225)),
+            Level(Level.enemy_setup_frantic_rows(enemy_images[6], bullet2_image, ship_speed=2.2, bullet_speed=3.75,
+                                                 fire_freq=200)),
+            Level(Level.enemy_setup_frantic_alt(enemy_images[6], bullet2_image, ship_speed=2.2, bullet_speed=3.75,
+                                                fire_freq=200)),
+            Level(Level.enemy_setup_frantic_boss(enemy_images[6], bullet2_image, ship_speed=2.2, bullet_speed=3.75,
+                                                 fire_freq=200)),
+            Level(Level.enemy_setup_frantic_rows_sw(enemy_images[7], bullet2_image, ship_speed=2.4, bullet_speed=4,
+                                                    fire_freq=175)),
+            Level(Level.enemy_setup_frantic_alt_sw(enemy_images[7], bullet2_image, ship_speed=2.4, bullet_speed=4,
+                                                   fire_freq=175)),
+            Level(Level.enemy_setup_frantic_boss_sw(enemy_images[7], bullet2_image, ship_speed=2.4, bullet_speed=4,
+                                                    fire_freq=175)),
         ]
         self.current_score = 0
         self.bonuses_dropped = []
@@ -112,7 +139,7 @@ class Game:
 
     # Randomly deploy the splicer
     def random_splicer_deployment(self, player_x):
-        if self.current_level_num >= 10 and not self.splicer_deployed:
+        if self.current_level_num > 12 and not self.splicer_deployed:
             self.splicer_deployed = True if random.randint(0, 1250) == 27 else False
         elif self.splicer_deployed:
             deployment_complete = self.splicer.perform_action(player_x)

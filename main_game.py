@@ -1,3 +1,4 @@
+import datetime
 from itertools import cycle
 
 import pygame.transform
@@ -42,25 +43,28 @@ def begin_screen():
     screen.blit(menu_text, (150, 290))
 
     begin_screen_running = True
+    color_swap_time = datetime.datetime.now()
     while begin_screen_running:
         # title colors
-        next(iterator)
-        galacticon_text_1 = galacticon_font.render("G L C I O", True, colors[next(iterator)])
-        galacticon_text_2 = galacticon_font.render("A A T C N", True, colors[next(iterator)])
-        screen.blit(galacticon_text_1, (80, 80))
-        screen.blit(galacticon_text_2, (144, 80))
+        if datetime.datetime.now() >= color_swap_time:
+            color_swap_time = datetime.datetime.now() + datetime.timedelta(seconds=0.3)
+            next(iterator)
+            galacticon_text_1 = galacticon_font.render("G L C I O", True, colors[next(iterator)])
+            galacticon_text_2 = galacticon_font.render("A A T C N", True, colors[next(iterator)])
+            screen.blit(galacticon_text_1, (80, 80))
+            screen.blit(galacticon_text_2, (144, 80))
 
         # keyboard events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RETURN:
-                    galacticon_text_3 = galacticon_font.render("GALACTICON", True, (214, 0, 0))
-                    screen.blit(galacticon_text_3, (80, 100))
                     begin_screen_running = False
                 if event.key == pygame.K_a:
+                    pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
+
                     arrow_keys_img = pygame.image.load("assets/arrow_keys.png").convert()
                     arrow_keys_img.set_colorkey((0, 0, 0))
                     screen.blit(arrow_keys_img, (50, 380))
@@ -79,8 +83,24 @@ def begin_screen():
                     arrow_keys_text = menu_font.render("bar to fire", True, (255, 255, 255))
                     screen.blit(arrow_keys_text, (180, 470))
 
+                    sideswiper_img = pygame.image.load("assets/sideswiper.png").convert()
+                    sideswiper_img.set_colorkey((0, 0, 0))
+                    screen.blit(sideswiper_img, (640, 385))
+                    splicer_img = pygame.image.load("assets/splicer.png").convert()
+                    splicer_img.set_colorkey((0, 0, 0))
+                    screen.blit(splicer_img, (520, 450))
+                    enemy_text = menu_font.render("watch out for these guys!", True, (255, 255, 255))
+                    screen.blit(enemy_text, (460, 435))
+                if event.key == pygame.K_s:
+                    pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
+                    # score!
+                if event.key == pygame.K_u:
+                    pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
+                    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 20)
+                    arrow_keys_text = menu_font.render("Well that was pointless.", True, (255, 255, 255))
+                    screen.blit(arrow_keys_text, (130, 430))
+
         pygame.display.update()
-        clock.tick(75)
 
 
 def play_game():
