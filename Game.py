@@ -49,9 +49,6 @@ class Game:
                                                    fire_freq=275)),
             Level(Level.enemy_setup_frantic_boss_sw(enemy_images[3], bullet1_image, ship_speed=1.6, bullet_speed=3,
                                                     fire_freq=275)),
-
-            Level(Level.enemy_setup_boss_sw()),
-
             Level(Level.enemy_setup_classic_rows(enemy_images[4], bullet2_image, ship_speed=1.8, bullet_speed=3.25,
                                                  fire_freq=250)),
             Level(Level.enemy_setup_classic_alt(enemy_images[4], bullet2_image, ship_speed=1.8, bullet_speed=3.25,

@@ -162,11 +162,3 @@ class Level:
                  range(45, 690, 60)]
         sideswiper = [SideswiperEnemy(3, 5.5)]
         return [line1, line2, line3, sideswiper]
-
-    # A boss on top with sideswipers below
-    @staticmethod
-    def enemy_setup_boss_sw():
-        boss = [BossEnemy(num_hits=10, ship_speed=5, bullet_speed=7.5, fire_freq=175)]
-        sideswipers1 = [SideswiperEnemy(3, 5), SideswiperEnemy(3, 5)]
-        sideswipers2 = [SideswiperEnemy(1, 8), SideswiperEnemy(1, 8)]
-        return [boss, sideswipers1, sideswipers2]
