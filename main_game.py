@@ -93,7 +93,15 @@ def begin_screen():
                     screen.blit(enemy_text, (460, 435))
                 if event.key == pygame.K_s:
                     pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
-                    # score!
+                    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
+                    y_coord = 370
+                    score_records = Game.read_scoreboard(5)
+                    for score_record in score_records:
+                        score_text = menu_font.render(score_record[0], True, (255, 255, 255))
+                        screen.blit(score_text, (290, y_coord))
+                        score_text = menu_font.render(score_record[1], True, (255, 255, 255))
+                        screen.blit(score_text, (390, y_coord))
+                        y_coord += 30
                 if event.key == pygame.K_u:
                     pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
                     menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 20)
@@ -244,13 +252,28 @@ def play_game():
             player.recenter()
 
         pygame.display.update()
-        pygame.time.wait(1500)
+        pygame.time.wait(2000)
 
     # end game
 
 
 def end_screen():
-    pass
+    screen.fill((0, 0, 0))
+
+    # Ask for 3-letter name, temporarily TNT
+
+    score_records = game.write_scoreboard("TNT")
+    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 32)
+    y_coord = 150
+    for score_record in score_records:
+        score_text = menu_font.render(score_record[0], True, (255, 255, 255))
+        screen.blit(score_text, (290, y_coord))
+        score_text = menu_font.render(score_record[1], True, (255, 255, 255))
+        screen.blit(score_text, (390, y_coord))
+        y_coord += 30
+
+    pygame.display.update()
+    pygame.time.wait(5000)
 
 
 if __name__ == "__main__":

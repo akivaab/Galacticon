@@ -1,5 +1,7 @@
 import pygame
 import random
+import csv
+from math import inf
 from math import floor
 from Level import Level
 from Bonuses.Plus import Plus
@@ -191,3 +193,27 @@ class Game:
         game_completed_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
         game_completed_text = game_completed_font.render("YOU WIN!!", True, (255, 255, 255))
         screen.blit(game_completed_text, (110, 250))
+
+    # Get some number of the top scores from the scoreboard
+    @staticmethod
+    def read_scoreboard(num_records=inf):
+        rows = []
+        with open("scoreboard.csv", 'r') as scoreboard:
+            csv_reader = csv.reader(scoreboard)
+            next(csv_reader)
+            for row in csv_reader:
+                if csv_reader.line_num - 1 > num_records:
+                    break
+                rows.append(row)
+        return rows
+
+    # Add a new high score to the scoreboard
+    def write_scoreboard(self, name, num_records=10):
+        scores = Game.read_scoreboard()
+        scores.append([name, self.current_score])
+        print(scores)
+        scores.sort(key=lambda x: int(x[1]), reverse=True)
+        with open("scoreboard.csv", 'w') as scoreboard:
+            csv_writer = csv.writer(scoreboard)
+            csv_writer.writerows(scores)
+        return scores[:num_records]
