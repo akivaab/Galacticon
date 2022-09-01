@@ -1,5 +1,5 @@
-level with (harder to hit) shrunken enemies
-enemies that shoot laser lines instead of round bullets
+- highlight only your high score if two are the same
+- get endscreen music
 
 Level Order:
 

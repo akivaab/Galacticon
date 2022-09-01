@@ -99,7 +99,7 @@ def begin_screen():
                     for score_record in score_records:
                         score_text = menu_font.render(score_record[0], True, (255, 255, 255))
                         screen.blit(score_text, (290, y_coord))
-                        score_text = menu_font.render(score_record[1], True, (255, 255, 255))
+                        score_text = menu_font.render(str(score_record[1].rjust(7, "0")), True, (255, 255, 255))
                         screen.blit(score_text, (390, y_coord))
                         y_coord += 30
                 if event.key == pygame.K_u:
@@ -259,21 +259,84 @@ def play_game():
 
 def end_screen():
     screen.fill((0, 0, 0))
+    score_records = Game.read_scoreboard(10)
 
-    # Ask for 3-letter name, temporarily TNT
+    # display "HIGH SCORE" if one was achieved
+    achieved_high_score = len([record[1] for record in score_records if int(record[1]) > game.current_score]) < 10
+    if achieved_high_score:
+        menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 48)
+        score_text = menu_font.render("HIGH SCORE", True, (255, 215, 0))
+        screen.blit(score_text, (160, 80))
 
-    score_records = game.write_scoreboard("TNT")
-    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 32)
-    y_coord = 150
+    # display the player's score
+    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 42)
+    score_text = menu_font.render("You got:", True, (255, 215, 0))
+    screen.blit(score_text, (240, 450))
+    score_text = menu_font.render(str(game.current_score).rjust(7, "0"), True, (255, 215, 0))
+    screen.blit(score_text, (250, 510))
+
+    # enter the player's initials
+    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
+    initials_text = menu_font.render("Enter your initials:", True, (255, 255, 255))
+    screen.blit(initials_text, (170, 200))
+    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
+    initials_text = menu_font.render("(three, specifically)", True, (255, 255, 255))
+    screen.blit(initials_text, (235, 230))
+    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
+    initials = ""
+    while len(initials) < 3:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.TEXTINPUT:
+                initials += event.text.capitalize()
+                initial_text = menu_font.render(initials, True, (255, 255, 255))
+                screen.blit(initial_text, (300, 310))
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_BACKSPACE:
+                    initials = initials[:-1]
+                    initial_text = menu_font.render(initials, True, (255, 255, 255))
+                    screen.blit(initial_text, (300, 310))
+        pygame.display.update()
+
+    # Easter Egg!
+    if initials == "WHY":
+        menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
+        easter_egg_text = menu_font.render("because.", True, (255, 0, 0))
+        screen.blit(easter_egg_text, (500, 400))
+        pygame.display.update()
+        pygame.time.wait(200)
+
+    pygame.time.wait(400)
+
+    # display the scoreboard (top 10)
+    screen.fill((0, 0, 0))
+    new_score = game.write_scoreboard(initials)
+    score_records = Game.read_scoreboard(10)
+    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
+    y_coord = 100
     for score_record in score_records:
-        score_text = menu_font.render(score_record[0], True, (255, 255, 255))
-        screen.blit(score_text, (290, y_coord))
-        score_text = menu_font.render(score_record[1], True, (255, 255, 255))
-        screen.blit(score_text, (390, y_coord))
-        y_coord += 30
+        color = (255, 215, 0) if score_record[1] == new_score[1] else (255, 255, 255)
+        score_text = menu_font.render(score_record[0], True, color)
+        screen.blit(score_text, (250, y_coord))
+        score_text = menu_font.render(str(score_record[1]).rjust(7, "0"), True, color)
+        screen.blit(score_text, (380, y_coord))
+        y_coord += 36
+        pygame.display.update()
+        pygame.time.wait(100)
+    if not achieved_high_score:
+        score_text = menu_font.render(new_score[0], True, (255, 215, 0))
+        screen.blit(score_text, (250, 550))
+        score_text = menu_font.render(str(new_score[1]).rjust(7, "0"), True, (255, 215, 0))
+        screen.blit(score_text, (380, 550))
+        pygame.display.update()
 
-    pygame.display.update()
-    pygame.time.wait(5000)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
+                pygame.quit()
+                exit()
 
 
 if __name__ == "__main__":

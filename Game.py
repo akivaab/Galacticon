@@ -200,20 +200,19 @@ class Game:
         rows = []
         with open("scoreboard.csv", 'r') as scoreboard:
             csv_reader = csv.reader(scoreboard)
-            next(csv_reader)
             for row in csv_reader:
-                if csv_reader.line_num - 1 > num_records:
+                if csv_reader.line_num > num_records:
                     break
                 rows.append(row)
         return rows
 
     # Add a new high score to the scoreboard
-    def write_scoreboard(self, name, num_records=10):
+    def write_scoreboard(self, name):
         scores = Game.read_scoreboard()
-        scores.append([name, self.current_score])
-        print(scores)
+        new_score = [name, self.current_score]
+        scores.append(new_score)
         scores.sort(key=lambda x: int(x[1]), reverse=True)
-        with open("scoreboard.csv", 'w') as scoreboard:
+        with open("scoreboard.csv", 'w', newline='') as scoreboard:
             csv_writer = csv.writer(scoreboard)
             csv_writer.writerows(scores)
-        return scores[:num_records]
+        return new_score
