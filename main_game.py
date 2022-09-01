@@ -151,6 +151,8 @@ def play_game():
                         player_x_change = 0
                     if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                         player_y_change = 0
+                    if event.key == pygame.K_p:
+                        pause()
 
             # move and display the player
             player.move(player_x_change, player_y_change)
@@ -258,11 +260,13 @@ def play_game():
 
 
 def end_screen():
+    pygame.mixer.music.load("assets/undertale_bird_that_carries_you_over_a_disproportionately_small_gap.wav")
+    pygame.mixer.music.play(-1)
     screen.fill((0, 0, 0))
     score_records = Game.read_scoreboard(10)
 
     # display "HIGH SCORE" if one was achieved
-    achieved_high_score = len([record[1] for record in score_records if int(record[1]) > game.current_score]) < 10
+    achieved_high_score = len([record[1] for record in score_records if int(record[1]) > game.current_score]) == 0
     if achieved_high_score:
         menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 48)
         score_text = menu_font.render("HIGH SCORE", True, (255, 215, 0))
@@ -293,11 +297,11 @@ def end_screen():
                 initials += event.text.capitalize()
                 initial_text = menu_font.render(initials, True, (255, 255, 255))
                 screen.blit(initial_text, (300, 310))
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_BACKSPACE:
-                    initials = initials[:-1]
-                    initial_text = menu_font.render(initials, True, (255, 255, 255))
-                    screen.blit(initial_text, (300, 310))
+            # if event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.K_BACKSPACE:
+            #         initials = initials[:-1]
+            #         initial_text = menu_font.render(initials, True, (255, 255, 255))
+            #         screen.blit(initial_text, (300, 310))
         pygame.display.update()
 
     # Easter Egg!
@@ -316,8 +320,12 @@ def end_screen():
     score_records = Game.read_scoreboard(10)
     menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
     y_coord = 100
+    highlight_score = True
     for score_record in score_records:
-        color = (255, 215, 0) if score_record[1] == new_score[1] else (255, 255, 255)
+        color = (255, 255, 255)
+        if int(score_record[1]) == int(new_score[1]) and highlight_score:
+            color = (255, 215, 0)
+            highlight_score = False
         score_text = menu_font.render(score_record[0], True, color)
         screen.blit(score_text, (250, y_coord))
         score_text = menu_font.render(str(score_record[1]).rjust(7, "0"), True, color)
@@ -325,18 +333,32 @@ def end_screen():
         y_coord += 36
         pygame.display.update()
         pygame.time.wait(100)
-    if not achieved_high_score:
-        score_text = menu_font.render(new_score[0], True, (255, 215, 0))
-        screen.blit(score_text, (250, 550))
-        score_text = menu_font.render(str(new_score[1]).rjust(7, "0"), True, (255, 215, 0))
-        screen.blit(score_text, (380, 550))
-        pygame.display.update()
+    score_text = menu_font.render(new_score[0], True, (255, 215, 0))
+    screen.blit(score_text, (250, 550))
+    score_text = menu_font.render(str(new_score[1]).rjust(7, "0"), True, (255, 215, 0))
+    screen.blit(score_text, (380, 550))
+    pygame.display.update()
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
                 pygame.quit()
                 exit()
+
+
+def pause():
+    pygame.mixer.music.load("assets/deltarune_thrash_machine.wav")
+    pygame.mixer.music.play(-1)
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.KEYUP and event.key == pygame.K_p:
+                paused = False
+    pygame.mixer.music.load("assets/deltarune_knock_you_down.wav")
+    pygame.mixer.music.play(-1)
 
 
 if __name__ == "__main__":

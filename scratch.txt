@@ -1,5 +1,7 @@
 - highlight only your high score if two are the same
-- get endscreen music
+- fix backspace for initials
+- megaboss!!
+- add pause button to instructions
 
 Level Order:
 
