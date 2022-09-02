@@ -4,18 +4,18 @@ from Enemies.Enemy import Enemy
 
 class Player:
     def __init__(self):
-        original_player_img = pygame.image.load("assets/player.png").convert()
+        original_player_img = pygame.image.load("assets/misc/player.png").convert()
         original_player_img.set_colorkey((0, 0, 0))
         self.image = pygame.transform.scale(original_player_img, (54, 54))
         self.x = 370
         self.y = 480
         self.lives = 3
         self.num_turrets = 1
-        bullet1 = pygame.image.load("assets/bullet1.png").convert()
+        bullet1 = pygame.image.load("assets/ammo/bullet1.png").convert()
         bullet1.set_colorkey((0, 0, 0))
-        bullet2 = pygame.image.load("assets/bullet2.png").convert()
+        bullet2 = pygame.image.load("assets/ammo/bullet2.png").convert()
         bullet2.set_colorkey((0, 0, 0))
-        bullet3 = pygame.image.load("assets/bullet3.png").convert()
+        bullet3 = pygame.image.load("assets/ammo/bullet3.png").convert()
         bullet3.set_colorkey((0, 0, 0))
         self.bullet_types = [bullet1, bullet2, bullet3]
         self.bullet_speeds = [5, 6.5, 5.5]
@@ -49,7 +49,7 @@ class Player:
                 self.bullets_fired.append(Bullet(self.x + 11, self.y - 15, bullet_type, -bullet_speed))
                 self.bullets_fired.append(Bullet(self.x - 12, self.y + 20, bullet_type, -bullet_speed))
                 self.bullets_fired.append(Bullet(self.x + 35, self.y + 20, bullet_type, -bullet_speed))
-            pygame.mixer.Sound("assets/laser.wav").play()
+            pygame.mixer.Sound("assets/sounds/laser.wav").play()
 
     # Move all the fired bullets (upwards)
     def move_bullets(self):
@@ -79,8 +79,7 @@ class Player:
 
     # Deduct a life and move the player offscreen
     def lose_life(self):
-        pygame.mixer.Sound("assets/explosion.wav").play(0, 800)
-        self.y = 2500
+        pygame.mixer.Sound("assets/sounds/explosion.wav").play(0, 800)
         self.lives -= 1
 
     # Reset the player to its default position

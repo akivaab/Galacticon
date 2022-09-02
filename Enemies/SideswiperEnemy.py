@@ -4,7 +4,7 @@ from Enemies.Enemy import *
 
 class SideswiperEnemy(Enemy):
     def __init__(self, num_hits, ship_speed=3):
-        swiper_img = pygame.image.load("assets/sideswiper.png").convert()
+        swiper_img = pygame.image.load("assets/enemies/sideswiper.png").convert()
         swiper_img.set_colorkey((0, 0, 0))
         swiper_img = pygame.transform.scale(swiper_img, (48, 48))
         swiper_img = pygame.transform.rotate(swiper_img, 90)
@@ -27,7 +27,7 @@ class SideswiperEnemy(Enemy):
 
     # Deduct from the number of hits the enemy can take
     def hit(self):
-        pygame.mixer.Sound("assets/explosion.wav").play()
+        pygame.mixer.Sound("assets/sounds/explosion.wav").play()
         self.num_hits -= 1
         if self.num_hits == 0:
             super().hit()

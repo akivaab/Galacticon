@@ -9,11 +9,11 @@ screen = pygame.display.set_mode((800, 600))
 
 # screen window caption and icon
 pygame.display.set_caption("Galacticon")
-icon = pygame.image.load("assets/logo.png").convert()
+icon = pygame.image.load("assets/misc/logo.png").convert()
 pygame.display.set_icon(icon)
 
 # init player
-playerImg = pygame.image.load("assets/player.png").convert()
+playerImg = pygame.image.load("assets/misc/player.png").convert()
 playerX = 370
 playerY = 480
 playerX_change = 0
@@ -27,14 +27,14 @@ enemyY_change = []
 num_enemies = 6
 
 for i in range(num_enemies):
-    enemyImg.append(pygame.image.load("assets/enemy1.png").convert())
+    enemyImg.append(pygame.image.load("assets/enemies/enemy1.png").convert())
     enemyX.append(random.randint(0, 736))
     enemyY.append(random.randint(50, 150))
     enemyX_change.append(0.2)
     enemyY_change.append(40)
 
 # init bullet
-bulletImg = pygame.image.load("assets/bullet1.png").convert()
+bulletImg = pygame.image.load("assets/ammo/bullet1.png").convert()
 bulletX = 0
 bulletY = 480
 bulletX_change = 0
@@ -42,10 +42,10 @@ bulletY_change = 0.5
 bulletState = "ready"
 
 score_value = 0
-font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
+font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 16)
 textX = 10
 textY = 10
-game_over_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
+game_over_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 64)
 
 
 def show_score(x, y):

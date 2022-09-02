@@ -1,7 +1,6 @@
 - highlight only your high score if two are the same
-- fix backspace for initials
 - megaboss!!
-- add pause button to instructions
+- make the score alternate color gold to yellow
 
 Level Order:
 

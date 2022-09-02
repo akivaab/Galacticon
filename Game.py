@@ -1,8 +1,7 @@
 import pygame
 import random
 import csv
-from math import inf
-from math import floor
+from math import inf, floor
 from Level import Level
 from Bonuses.Plus import Plus
 from Bonuses.Heart import Heart
@@ -10,20 +9,22 @@ from Bonuses.Two import Two
 from Bonuses.Three import Three
 from Enemies.Splicer import Splicer
 
+ARCADE_FONT = 'assets/misc/PressStart2P-vaV7.ttf'
+
 
 class Game:
     def __init__(self):
         self.current_level_num = 1
         enemy_images = []
         for i in range(1, 9):
-            enemy_img = pygame.image.load("assets/enemy" + str(i) + ".png").convert()
+            enemy_img = pygame.image.load("assets/enemies/enemy" + str(i) + ".png").convert()
             enemy_img.set_colorkey((0, 0, 0))
             enemy_images.append(pygame.transform.scale(enemy_img, (54, 54)))
 
-        bullet1_image = pygame.image.load("assets/enemy_bullet1.png").convert()
+        bullet1_image = pygame.image.load("assets/ammo/enemy_bullet1.png").convert()
         bullet1_image.set_colorkey((0, 0, 0))
         bullet1_image = pygame.transform.scale(bullet1_image, (40, 40))
-        bullet2_image = pygame.image.load("assets/enemy_bullet2.png").convert()
+        bullet2_image = pygame.image.load("assets/ammo/enemy_bullet2.png").convert()
         bullet2_image.set_colorkey((0, 0, 0))
 
         self.levels = [
@@ -151,7 +152,7 @@ class Game:
     # Move on to the next level
     def go_to_next_level(self, screen):
         self.current_level_num += 1
-        next_level_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 32)
+        next_level_font = pygame.font.Font(ARCADE_FONT, 32)
         next_level_text = next_level_font.render("Level " + str(self.current_level_num), True, (255, 255, 255))
         screen.blit(next_level_text, (285, 280))
 
@@ -165,7 +166,7 @@ class Game:
 
     # Display the lives, level, and score on the screen
     def display_data(self, screen, num_lives):
-        font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 12)
+        font = pygame.font.Font(ARCADE_FONT, 12)
         lives = font.render("Lives:" + str(num_lives), True, (255, 255, 255))
         level = font.render("Level:" + str(self.current_level_num), True, (255, 255, 255))
         score = font.render("Score:" + str(self.current_score), True, (255, 255, 255))
@@ -176,21 +177,21 @@ class Game:
     # Display a message after the player dies
     @staticmethod
     def resuscitation_message(screen):
-        get_ready_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
+        get_ready_font = pygame.font.Font(ARCADE_FONT, 24)
         get_ready_text = get_ready_font.render("Get Ready To Continue", True, (255, 255, 255))
         screen.blit(get_ready_text, (150, 280))
 
     # Display a message when the player loses
     @staticmethod
     def game_over_message(screen):
-        game_over_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
+        game_over_font = pygame.font.Font(ARCADE_FONT, 64)
         game_over_text = game_over_font.render("GAME OVER", True, (255, 255, 255))
         screen.blit(game_over_text, (110, 250))
 
     # Display a message when the player wins
     @staticmethod
     def game_completed_message(screen):
-        game_completed_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
+        game_completed_font = pygame.font.Font(ARCADE_FONT, 64)
         game_completed_text = game_completed_font.render("YOU WIN!!", True, (255, 255, 255))
         screen.blit(game_completed_text, (110, 250))
 

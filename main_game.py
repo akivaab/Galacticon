@@ -1,8 +1,5 @@
 import datetime
 from itertools import cycle
-
-import pygame.transform
-
 from Game import *
 from Player import *
 from Enemies.Enemy import *
@@ -10,6 +7,7 @@ from Enemies.SideswiperEnemy import SideswiperEnemy
 from Enemies.FranticEnemy import FranticEnemy
 
 # initialize
+ARCADE_FONT = 'assets/misc/PressStart2P-vaV7.ttf'
 pygame.init()
 
 # create screen
@@ -17,7 +15,7 @@ screen = pygame.display.set_mode((800, 600))
 
 # screen window caption and icon
 pygame.display.set_caption("Galacticon")
-icon = pygame.image.load("assets/logo.png").convert_alpha()
+icon = pygame.image.load("assets/misc/logo.png").convert_alpha()
 pygame.display.set_icon(icon)
 
 clock = pygame.time.Clock()
@@ -25,14 +23,16 @@ game = Game()
 
 
 def begin_screen():
-    pygame.mixer.music.load("assets/undertale_dating_tense.wav")
+    pygame.mixer.music.load("assets/music/undertale_dating_tense.wav")
     pygame.mixer.music.play(-1)
+    screen.fill((0, 0, 0))
 
-    galacticon_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
+    galacticon_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 64)
     colors = [(62, 216, 18), (11, 50, 253)]
     iterator = cycle(range(2))
 
-    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
+    # opening menu button options
+    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 16)
     menu_text = menu_font.render("Press ENTER to play!", True, (255, 255, 255))
     screen.blit(menu_text, (240, 200))
     menu_text = menu_font.render("Press A for instructions!", True, (255, 255, 255))
@@ -60,21 +60,23 @@ def begin_screen():
                 pygame.quit()
                 exit()
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_RETURN:  # start
                     begin_screen_running = False
-                if event.key == pygame.K_a:
-                    pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
+                if event.key == pygame.K_a:  # instructions
+                    pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 400))
 
-                    arrow_keys_img = pygame.image.load("assets/arrow_keys.png").convert()
+                    # how to move
+                    arrow_keys_img = pygame.image.load("assets/misc/arrow_keys.png").convert()
                     arrow_keys_img.set_colorkey((0, 0, 0))
                     screen.blit(arrow_keys_img, (50, 380))
-                    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 12)
+                    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 12)
                     arrow_keys_text = menu_font.render("press and hold the", True, (255, 255, 255))
                     screen.blit(arrow_keys_text, (130, 380))
                     arrow_keys_text = menu_font.render("arrow keys to move", True, (255, 255, 255))
                     screen.blit(arrow_keys_text, (130, 400))
 
-                    space_bar_img = pygame.image.load("assets/space_bar.png").convert()
+                    # how to fire
+                    space_bar_img = pygame.image.load("assets/misc/space_bar.png").convert()
                     space_bar_img.set_colorkey((0, 0, 0))
                     space_bar_img = pygame.transform.scale(space_bar_img, (128, 32))
                     screen.blit(space_bar_img, (40, 450))
@@ -83,17 +85,28 @@ def begin_screen():
                     arrow_keys_text = menu_font.render("bar to fire", True, (255, 255, 255))
                     screen.blit(arrow_keys_text, (180, 470))
 
-                    sideswiper_img = pygame.image.load("assets/sideswiper.png").convert()
+                    # how to pause
+                    p_key_img = pygame.image.load("assets/misc/p_key.png").convert()
+                    p_key_img.set_colorkey((0, 0, 0))
+                    p_key_img = pygame.transform.scale(p_key_img, (48, 48))
+                    screen.blit(p_key_img, (50, 510))
+                    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 12)
+                    arrow_keys_text = menu_font.render("press P to pause", True, (255, 255, 255))
+                    screen.blit(arrow_keys_text, (125, 520))
+
+                    # enemy warning
+                    sideswiper_img = pygame.image.load("assets/enemies/sideswiper.png").convert()
                     sideswiper_img.set_colorkey((0, 0, 0))
-                    screen.blit(sideswiper_img, (640, 385))
-                    splicer_img = pygame.image.load("assets/splicer.png").convert()
+                    screen.blit(sideswiper_img, (640, 370))
+                    splicer_img = pygame.image.load("assets/enemies/splicer.png").convert()
                     splicer_img.set_colorkey((0, 0, 0))
                     screen.blit(splicer_img, (520, 450))
                     enemy_text = menu_font.render("watch out for these guys!", True, (255, 255, 255))
                     screen.blit(enemy_text, (460, 435))
-                if event.key == pygame.K_s:
+
+                if event.key == pygame.K_s:  # scoreboard
                     pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
-                    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
+                    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 16)
                     y_coord = 370
                     score_records = Game.read_scoreboard(5)
                     for score_record in score_records:
@@ -102,9 +115,10 @@ def begin_screen():
                         score_text = menu_font.render(str(score_record[1].rjust(7, "0")), True, (255, 255, 255))
                         screen.blit(score_text, (390, y_coord))
                         y_coord += 30
-                if event.key == pygame.K_u:
+
+                if event.key == pygame.K_u:  # for fun
                     pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
-                    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 20)
+                    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 20)
                     arrow_keys_text = menu_font.render("Well that was pointless.", True, (255, 255, 255))
                     screen.blit(arrow_keys_text, (130, 430))
 
@@ -113,7 +127,7 @@ def begin_screen():
 
 def play_game():
     # start game music
-    pygame.mixer.music.load("assets/deltarune_knock_you_down.wav")
+    pygame.mixer.music.load("assets/music/deltarune_knock_you_down.wav")
     pygame.mixer.music.play(-1)
 
     enemies_grid = game.get_cur_enemy_setup()
@@ -260,7 +274,7 @@ def play_game():
 
 
 def end_screen():
-    pygame.mixer.music.load("assets/undertale_bird_that_carries_you_over_a_disproportionately_small_gap.wav")
+    pygame.mixer.music.load("assets/music/undertale_bird_that_carries_you_over_a_disproportionately_small_gap.wav")
     pygame.mixer.music.play(-1)
     screen.fill((0, 0, 0))
     score_records = Game.read_scoreboard(10)
@@ -268,45 +282,52 @@ def end_screen():
     # display "HIGH SCORE" if one was achieved
     achieved_high_score = len([record[1] for record in score_records if int(record[1]) > game.current_score]) == 0
     if achieved_high_score:
-        menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 48)
+        menu_font = pygame.font.Font(ARCADE_FONT, 48)
         score_text = menu_font.render("HIGH SCORE", True, (255, 215, 0))
         screen.blit(score_text, (160, 80))
 
     # display the player's score
-    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 42)
-    score_text = menu_font.render("You got:", True, (255, 215, 0))
-    screen.blit(score_text, (240, 450))
+    menu_font = pygame.font.Font(ARCADE_FONT, 42)
+    score_text = menu_font.render("You scored:", True, (255, 215, 0))
+    screen.blit(score_text, (175, 450))
     score_text = menu_font.render(str(game.current_score).rjust(7, "0"), True, (255, 215, 0))
     screen.blit(score_text, (250, 510))
 
     # enter the player's initials
-    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
+    menu_font = pygame.font.Font(ARCADE_FONT, 24)
     initials_text = menu_font.render("Enter your initials:", True, (255, 255, 255))
     screen.blit(initials_text, (170, 200))
-    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 16)
+    menu_font = pygame.font.Font(ARCADE_FONT, 16)
     initials_text = menu_font.render("(three, specifically)", True, (255, 255, 255))
     screen.blit(initials_text, (235, 230))
-    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 64)
+    continue_text = menu_font.render("Press ENTER to continue.", True, (255, 255, 255))
+    screen.blit(continue_text, (215, 400))
+    menu_font = pygame.font.Font(ARCADE_FONT, 64)
     initials = ""
-    while len(initials) < 3:
+    entering_initials = True
+    while entering_initials:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if event.type == pygame.TEXTINPUT:
+            if event.type == pygame.TEXTINPUT and event.text.isalpha() and len(initials) < 3:
                 initials += event.text.capitalize()
                 initial_text = menu_font.render(initials, True, (255, 255, 255))
-                screen.blit(initial_text, (300, 310))
-            # if event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.K_BACKSPACE:
-            #         initials = initials[:-1]
-            #         initial_text = menu_font.render(initials, True, (255, 255, 255))
-            #         screen.blit(initial_text, (300, 310))
+                screen.blit(initial_text, (300, 300))
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_RETURN:
+                    entering_initials = len(initials) < 3
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_BACKSPACE:
+                    pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(300, 300, 200, 64))
+                    initials = initials[:-1]
+                    initial_text = menu_font.render(initials, True, (255, 255, 255))
+                    screen.blit(initial_text, (300, 300))
         pygame.display.update()
 
     # Easter Egg!
     if initials == "WHY":
-        menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
+        menu_font = pygame.font.Font(ARCADE_FONT, 24)
         easter_egg_text = menu_font.render("because.", True, (255, 0, 0))
         screen.blit(easter_egg_text, (500, 400))
         pygame.display.update()
@@ -318,7 +339,7 @@ def end_screen():
     screen.fill((0, 0, 0))
     new_score = game.write_scoreboard(initials)
     score_records = Game.read_scoreboard(10)
-    menu_font = pygame.font.Font('assets/PressStart2P-vaV7.ttf', 24)
+    menu_font = pygame.font.Font(ARCADE_FONT, 24)
     y_coord = 100
     highlight_score = True
     for score_record in score_records:
@@ -334,20 +355,28 @@ def end_screen():
         pygame.display.update()
         pygame.time.wait(100)
     score_text = menu_font.render(new_score[0], True, (255, 215, 0))
-    screen.blit(score_text, (250, 550))
+    screen.blit(score_text, (250, 500))
     score_text = menu_font.render(str(new_score[1]).rjust(7, "0"), True, (255, 215, 0))
-    screen.blit(score_text, (380, 550))
+    screen.blit(score_text, (380, 500))
+
+    menu_font = pygame.font.Font(ARCADE_FONT, 16)
+    continue_text = menu_font.render("Press ENTER to play again.", True, (255, 255, 255))
+    screen.blit(continue_text, (200, 560))
     pygame.display.update()
 
-    while True:
+    scoreboard_running = True
+    while scoreboard_running:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+            if event.type == pygame.KEYUP and event.key == pygame.K_RETURN:
+                scoreboard_running = False
 
 
 def pause():
-    pygame.mixer.music.load("assets/deltarune_thrash_machine.wav")
+    pygame.display.set_caption("Soothing alien invasion noises")
+    pygame.mixer.music.load("assets/music/deltarune_thrash_machine.wav")
     pygame.mixer.music.play(-1)
     paused = True
     while paused:
@@ -357,11 +386,14 @@ def pause():
                 exit()
             if event.type == pygame.KEYUP and event.key == pygame.K_p:
                 paused = False
-    pygame.mixer.music.load("assets/deltarune_knock_you_down.wav")
+    pygame.display.set_caption("Galacticon")
+    pygame.mixer.music.load("assets/music/deltarune_knock_you_down.wav")
     pygame.mixer.music.play(-1)
 
 
 if __name__ == "__main__":
-    begin_screen()
-    play_game()
-    end_screen()
+    while True:
+        begin_screen()
+        play_game()
+        end_screen()
+        game = Game()

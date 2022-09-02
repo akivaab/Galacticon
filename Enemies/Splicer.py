@@ -6,14 +6,14 @@ class Splicer:
     def __init__(self):
         self.x = 0
         self.y = 600
-        img = pygame.image.load("assets/splicer.png").convert()
+        img = pygame.image.load("assets/enemies/splicer.png").convert()
         img.set_colorkey((0, 0, 0))
         self.image = pygame.transform.scale(img, (54, 54))
 
-        laser_img_h = pygame.image.load("assets/laser_wave_h.png").convert()
+        laser_img_h = pygame.image.load("assets/ammo/laser_wave_h.png").convert()
         laser_img_h.set_colorkey((0, 0, 0))
         self.laser_image_horizontal = pygame.transform.scale(laser_img_h, (24, 24))
-        laser_img_v = pygame.image.load("assets/laser_wave_v.png").convert()
+        laser_img_v = pygame.image.load("assets/ammo/laser_wave_v.png").convert()
         laser_img_v.set_colorkey((0, 0, 0))
         self.laser_image_vertical = pygame.transform.scale(laser_img_v, (24, 24))
         self.laserbeam_components = []
