@@ -1,6 +1,4 @@
-- highlight only your high score if two are the same
-- megaboss!!
-- make the score alternate color gold to yellow
+- gyga!!
 
 Level Order:
 

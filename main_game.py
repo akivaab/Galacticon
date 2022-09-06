@@ -23,6 +23,7 @@ game = Game()
 
 
 def begin_screen():
+    # init
     pygame.mixer.music.load("assets/music/undertale_dating_tense.wav")
     pygame.mixer.music.play(-1)
     screen.fill((0, 0, 0))
@@ -42,10 +43,11 @@ def begin_screen():
     menu_text = menu_font.render("Press U for no reason whatsoever!", True, (255, 255, 255))
     screen.blit(menu_text, (150, 290))
 
+    # screen loop
     begin_screen_running = True
     color_swap_time = datetime.datetime.now()
     while begin_screen_running:
-        # title colors
+        # alternating title colors
         if datetime.datetime.now() >= color_swap_time:
             color_swap_time = datetime.datetime.now() + datetime.timedelta(seconds=0.3)
             next(iterator)
@@ -126,10 +128,9 @@ def begin_screen():
 
 
 def play_game():
-    # start game music
+    # init
     pygame.mixer.music.load("assets/music/deltarune_knock_you_down.wav")
     pygame.mixer.music.play(-1)
-
     enemies_grid = game.get_cur_enemy_setup()
     player = Player()
 
@@ -140,6 +141,7 @@ def play_game():
         player_x_change = 0
         player_y_change = 0
 
+        # level loop
         level_running = True
         while level_running:
             screen.fill((0, 0, 0))
@@ -178,7 +180,7 @@ def play_game():
             for bullet in player.bullets_fired:
                 bullet.display(screen)
 
-            # move and check if the player caught (then display) the bonuses
+            # move and check if the player caught the bonuses, and display them
             game.random_bonus_drop()
             game.move_bonuses()
             game.remove_offscreen_bonuses()
@@ -274,26 +276,20 @@ def play_game():
 
 
 def end_screen():
+    # init
     pygame.mixer.music.load("assets/music/undertale_bird_that_carries_you_over_a_disproportionately_small_gap.wav")
     pygame.mixer.music.play(-1)
     screen.fill((0, 0, 0))
     score_records = Game.read_scoreboard(10)
 
-    # display "HIGH SCORE" if one was achieved
+    # display "HIGH SCORE" on top of the screen if one was achieved
     achieved_high_score = len([record[1] for record in score_records if int(record[1]) > game.current_score]) == 0
     if achieved_high_score:
         menu_font = pygame.font.Font(ARCADE_FONT, 48)
         score_text = menu_font.render("HIGH SCORE", True, (255, 215, 0))
         screen.blit(score_text, (160, 80))
 
-    # display the player's score
-    menu_font = pygame.font.Font(ARCADE_FONT, 42)
-    score_text = menu_font.render("You scored:", True, (255, 215, 0))
-    screen.blit(score_text, (175, 450))
-    score_text = menu_font.render(str(game.current_score).rjust(7, "0"), True, (255, 215, 0))
-    screen.blit(score_text, (250, 510))
-
-    # enter the player's initials
+    # display instructions for submitting initials
     menu_font = pygame.font.Font(ARCADE_FONT, 24)
     initials_text = menu_font.render("Enter your initials:", True, (255, 255, 255))
     screen.blit(initials_text, (170, 200))
@@ -302,27 +298,43 @@ def end_screen():
     screen.blit(initials_text, (235, 230))
     continue_text = menu_font.render("Press ENTER to continue.", True, (255, 255, 255))
     screen.blit(continue_text, (215, 400))
-    menu_font = pygame.font.Font(ARCADE_FONT, 64)
+
+    # enter the player's initials / alternate score display colors
     initials = ""
+    colors = [(255, 215, 0), (255, 235, 42)]
+    iterator = cycle(range(2))
+    color_swap_time = datetime.datetime.now()
     entering_initials = True
     while entering_initials:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if event.type == pygame.TEXTINPUT and event.text.isalpha() and len(initials) < 3:
+            if event.type == pygame.TEXTINPUT and event.text.isalpha() and len(initials) < 3:  # type letter
+                menu_font = pygame.font.Font(ARCADE_FONT, 64)
                 initials += event.text.capitalize()
                 initial_text = menu_font.render(initials, True, (255, 255, 255))
                 screen.blit(initial_text, (300, 300))
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_RETURN:
-                    entering_initials = len(initials) < 3
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_BACKSPACE:
-                    pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(300, 300, 200, 64))
-                    initials = initials[:-1]
-                    initial_text = menu_font.render(initials, True, (255, 255, 255))
-                    screen.blit(initial_text, (300, 300))
+            if event.type == pygame.KEYUP and event.key == pygame.K_RETURN:  # submit initials
+                entering_initials = len(initials) < 3
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:  # remove letter
+                menu_font = pygame.font.Font(ARCADE_FONT, 64)
+                pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(300, 300, 200, 64))
+                initials = initials[:-1]
+                initial_text = menu_font.render(initials, True, (255, 255, 255))
+                screen.blit(initial_text, (300, 300))
+
+        # alternate score display colors
+        if datetime.datetime.now() >= color_swap_time:
+            color_swap_time = datetime.datetime.now() + datetime.timedelta(seconds=0.3)
+            next_color = colors[next(iterator)]
+            # display the player's score
+            menu_font = pygame.font.Font(ARCADE_FONT, 42)
+            score_text = menu_font.render("You scored:", True, next_color)
+            screen.blit(score_text, (175, 450))
+            score_text = menu_font.render(str(game.current_score).rjust(7, "0"), True, next_color)
+            screen.blit(score_text, (250, 510))
+
         pygame.display.update()
 
     # Easter Egg!
@@ -333,18 +345,23 @@ def end_screen():
         pygame.display.update()
         pygame.time.wait(200)
 
+    # submitted initials
+
     pygame.time.wait(400)
 
-    # display the scoreboard (top 10)
+    # re-init
     screen.fill((0, 0, 0))
     new_score = game.write_scoreboard(initials)
     score_records = Game.read_scoreboard(10)
     menu_font = pygame.font.Font(ARCADE_FONT, 24)
     y_coord = 100
     highlight_score = True
+
+    # display the top 10 scores
     for score_record in score_records:
         color = (255, 255, 255)
-        if int(score_record[1]) == int(new_score[1]) and highlight_score:
+        if score_record[0] == new_score[0] and int(score_record[1]) == int(new_score[1]) \
+                and highlight_score:  # color the just-achieved score gold if in the top 10
             color = (255, 215, 0)
             highlight_score = False
         score_text = menu_font.render(score_record[0], True, color)
@@ -354,16 +371,20 @@ def end_screen():
         y_coord += 36
         pygame.display.update()
         pygame.time.wait(100)
+
+    # display the just-achieved score
     score_text = menu_font.render(new_score[0], True, (255, 215, 0))
     screen.blit(score_text, (250, 500))
     score_text = menu_font.render(str(new_score[1]).rjust(7, "0"), True, (255, 215, 0))
     screen.blit(score_text, (380, 500))
 
+    # instruction display
     menu_font = pygame.font.Font(ARCADE_FONT, 16)
     continue_text = menu_font.render("Press ENTER to play again.", True, (255, 255, 255))
     screen.blit(continue_text, (200, 560))
     pygame.display.update()
 
+    # wait to end loop
     scoreboard_running = True
     while scoreboard_running:
         for event in pygame.event.get():
@@ -375,9 +396,12 @@ def end_screen():
 
 
 def pause():
+    # init
     pygame.display.set_caption("Soothing alien invasion noises")
     pygame.mixer.music.load("assets/music/deltarune_thrash_machine.wav")
     pygame.mixer.music.play(-1)
+
+    # wait to unpause
     paused = True
     while paused:
         for event in pygame.event.get():
@@ -386,6 +410,8 @@ def pause():
                 exit()
             if event.type == pygame.KEYUP and event.key == pygame.K_p:
                 paused = False
+
+    # reset music
     pygame.display.set_caption("Galacticon")
     pygame.mixer.music.load("assets/music/deltarune_knock_you_down.wav")
     pygame.mixer.music.play(-1)
