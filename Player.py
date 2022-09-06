@@ -82,6 +82,11 @@ class Player:
         pygame.mixer.Sound("assets/sounds/explosion.wav").play(0, 800)
         self.lives -= 1
 
+    # Add a life
+    def add_life(self):
+        if self.lives < 10:
+            self.lives += 1
+
     # Reset the player to its default position
     def recenter(self):
         self.x = 370

@@ -123,9 +123,9 @@ class Game:
                 remove_bonus_indexes.append(i)
                 bonus_score = 0
                 if isinstance(bonus, Plus):
-                    bonus_score = 2500
+                    bonus_score = 2000
                 elif isinstance(bonus, Heart):
-                    player.lives += 1
+                    player.add_life()
                     bonus_score = 250
                 elif isinstance(bonus, Two):
                     player.num_turrets = 2
