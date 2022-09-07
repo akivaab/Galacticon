@@ -1,4 +1,6 @@
 - gyga!!
+    attack 1: fire bullet spread
+    attack 2: track player with warmup waves active, then fire the laser
 
 Level Order:
 
