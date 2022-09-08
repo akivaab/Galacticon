@@ -5,6 +5,7 @@ from Player import *
 from Enemies.Enemy import *
 from Enemies.SideswiperEnemy import SideswiperEnemy
 from Enemies.FranticEnemy import FranticEnemy
+from Enemies.Gyga import Gyga
 
 # initialize
 ARCADE_FONT = 'assets/misc/PressStart2P-vaV7.ttf'
@@ -205,7 +206,7 @@ def play_game():
                         level_running = False
 
                     # move the enemy
-                    enemy.move()
+                    enemy.move() if not isinstance(enemy, Gyga) else enemy.track(player.x)
 
                     # check if the enemy was shot
                     colliding_bullet = enemy.collided_with_bullet(player.bullets_fired)
