@@ -2,6 +2,7 @@ from Enemies.BossEnemy import BossEnemy
 from Enemies.ClassicEnemy import ClassicEnemy
 from Enemies.FranticEnemy import FranticEnemy
 from Enemies.SideswiperEnemy import SideswiperEnemy
+from Enemies.Gyga import Gyga
 
 
 class Level:
@@ -162,3 +163,7 @@ class Level:
                  range(45, 690, 60)]
         sideswiper = [SideswiperEnemy(3, 5.5)]
         return [line1, line2, line3, sideswiper]
+
+    @staticmethod
+    def enemy_setup_gyga():
+        return [[Gyga()]]

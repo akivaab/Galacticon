@@ -28,6 +28,7 @@ class Game:
         bullet2_image.set_colorkey((0, 0, 0))
 
         self.levels = [
+            Level(Level.enemy_setup_gyga()),
             Level(Level.enemy_setup_classic_rows(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25,
                                                  fire_freq=350)),
             Level(Level.enemy_setup_classic_alt(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25,
