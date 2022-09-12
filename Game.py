@@ -28,7 +28,6 @@ class Game:
         bullet2_image.set_colorkey((0, 0, 0))
 
         self.levels = [
-            Level(Level.enemy_setup_gyga()),
             Level(Level.enemy_setup_classic_rows(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25,
                                                  fire_freq=350)),
             Level(Level.enemy_setup_classic_alt(enemy_images[0], bullet1_image, ship_speed=1, bullet_speed=2.25,
@@ -77,6 +76,7 @@ class Game:
                                                    fire_freq=175)),
             Level(Level.enemy_setup_frantic_boss_sw(enemy_images[7], bullet2_image, ship_speed=2.4, bullet_speed=4,
                                                     fire_freq=175)),
+            Level(Level.enemy_setup_gyga())
         ]
         self.current_score = 0
         self.bonuses_dropped = []
@@ -140,7 +140,7 @@ class Game:
 
     # Randomly deploy the splicer
     def random_splicer_deployment(self, player_x):
-        if self.current_level_num > 12 and not self.splicer_deployed:
+        if 13 <= self.current_level_num <= 24 and not self.splicer_deployed:
             self.splicer_deployed = True if random.randint(0, 1250) == 27 else False
         elif self.splicer_deployed:
             deployment_complete = self.splicer.perform_action(player_x)

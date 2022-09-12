@@ -9,6 +9,8 @@ from Enemies.Gyga import Gyga
 
 # initialize
 ARCADE_FONT = 'assets/misc/PressStart2P-vaV7.ttf'
+MAIN_GAME_MUSIC = "assets/music/deltarune_knock_you_down.wav"
+GYGA_GAME_MUSIC = "assets/music/undertale_save_the_world.wav"
 pygame.init()
 
 # create screen
@@ -130,7 +132,7 @@ def begin_screen():
 
 def play_game():
     # init
-    pygame.mixer.music.load("assets/music/deltarune_knock_you_down.wav")
+    pygame.mixer.music.load(MAIN_GAME_MUSIC)
     pygame.mixer.music.play(-1)
     enemies_grid = game.get_cur_enemy_setup()
     player = Player()
@@ -254,6 +256,8 @@ def play_game():
                 enemy.bullets_fired.clear()
                 if isinstance(enemy, SideswiperEnemy):
                     enemy.move_offscreen()
+                if isinstance(enemy, Gyga):
+                    enemy.reset()
         game.splicer.move_offscreen()
         game.splicer_deployed = False
 
@@ -272,6 +276,10 @@ def play_game():
 
         pygame.display.update()
         pygame.time.wait(2000)
+
+        # why do I hear boss music?
+        if game_running and level_is_completed and game.get_cur_level() == game.levels[-1]:
+            gyga_cutscene(enemies_grid[0][0])
 
     # end game
 
@@ -414,7 +422,36 @@ def pause():
 
     # reset music
     pygame.display.set_caption("Galacticon")
-    pygame.mixer.music.load("assets/music/deltarune_knock_you_down.wav")
+    pygame.mixer.music.load(MAIN_GAME_MUSIC if not game.get_cur_level() == game.levels[1] else GYGA_GAME_MUSIC)
+    pygame.mixer.music.play(-1)
+
+
+def gyga_cutscene(gyga):
+    # Opening cutscene
+    music_end = pygame.USEREVENT + 1
+    pygame.mixer.music.set_endevent(music_end)
+    pygame.mixer.music.load("assets/music/undertale_last_episode.wav")
+    pygame.mixer.music.play()
+
+    playing = True
+    while gyga.y <= 10:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+        screen.fill((0, 0, 0))
+        gyga.y += 0.04
+        gyga.display(screen)
+        pygame.display.update()
+    while playing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == music_end:
+                playing = False
+
+    pygame.mixer.music.load(GYGA_GAME_MUSIC)
     pygame.mixer.music.play(-1)
 
 

@@ -12,8 +12,8 @@ class Gyga(BossEnemy):
     def __init__(self):
         gyga_img = pygame.image.load("assets/enemies/gyga.png").convert()
         gyga_img.set_colorkey((0, 0, 0))
-        super().__init__(num_hits=90, x=272, y=10, boss_img=gyga_img, ship_speed=4, bullet_speed=6, fire_freq=100)
-        self.score_value = 5000
+        super().__init__(num_hits=90, x=272, y=-255, boss_img=gyga_img, ship_speed=4, bullet_speed=6, fire_freq=100)
+        self.score_value = 1000
 
         tracker_img = pygame.image.load("assets/ammo/gyga_tracker.png").convert()
         tracker_img.set_colorkey((0, 0, 0))
@@ -39,9 +39,9 @@ class Gyga(BossEnemy):
 
     def track(self, player_x):
         if self.is_tracking:
-            if self.x + 96 - player_x > 0 <= self.x - self.ship_speed <= 544:  # Gyga is to the right of player
+            if self.x + 96 - player_x > 5 and 0 <= self.x - self.ship_speed <= 544:  # Gyga is to the right of player
                 self.x -= self.ship_speed
-            elif self.x + 96 - player_x < 0 <= self.x + self.ship_speed <= 544:  # Gyga is to the left of player
+            elif self.x + 96 - player_x < -5 and 0 <= self.x + self.ship_speed <= 544:  # Gyga is to the left of player
                 self.x += self.ship_speed
         elif not self.is_locked:
             move_distance = self.direction * self.ship_speed
@@ -111,3 +111,11 @@ class Gyga(BossEnemy):
     # Remove all bullets that flew offscreen
     def remove_offscreen_bullets(self):
         self.bullets_fired = list(filter(lambda b: b.y < 600 and 0 <= b.x <= 800, self.bullets_fired))
+
+    # Reset the gyga attack
+    def reset(self):
+        self.step = 0
+        self.attack_pattern = AttackPattern.FIRE_SPREAD if self.attack_pattern == AttackPattern.TRACK_AND_BEAM \
+            else AttackPattern.TRACK_AND_BEAM
+        self.is_tracking = False
+        self.is_locked = False
