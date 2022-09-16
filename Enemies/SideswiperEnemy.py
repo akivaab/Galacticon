@@ -27,7 +27,7 @@ class SideswiperEnemy(Enemy):
 
     # Deduct from the number of hits the enemy can take
     def hit(self):
-        pygame.mixer.Sound("assets/sounds/explosion.wav").play()
+        pygame.mixer.Sound("assets/sounds/explosion.wav").play(0, 600)
         self.num_hits -= 1
         if self.num_hits == 0:
             super().hit()

@@ -261,12 +261,17 @@ def play_game():
         game.splicer.move_offscreen()
         game.splicer_deployed = False
 
+        wait_time = 2000
         if player.lives == 0:  # game over
             Game.game_over_message(screen)
             game_running = False
+            play_ending_music("assets/music/deltarune_faint_courage.wav")
+            wait_time += 4000
         elif game.is_completed():  # game won
             Game.game_completed_message(screen)
             game_running = False
+            play_ending_music("assets/music/undertale_dating_fight.wav")
+            wait_time += 4900
         elif level_is_completed:  # beat level
             game.go_to_next_level(screen)
             enemies_grid = game.get_cur_enemy_setup()
@@ -275,13 +280,18 @@ def play_game():
             player.recenter()
 
         pygame.display.update()
-        pygame.time.wait(2000)
+        pygame.time.wait(wait_time)
 
         # why do I hear boss music?
         if game_running and level_is_completed and game.get_cur_level() == game.levels[-1]:
             gyga_cutscene(enemies_grid[0][0])
 
     # end game
+
+
+def play_ending_music(music_file):
+    pygame.mixer.music.load(music_file)
+    pygame.mixer.music.play()
 
 
 def end_screen():
@@ -422,7 +432,7 @@ def pause():
 
     # reset music
     pygame.display.set_caption("Galacticon")
-    pygame.mixer.music.load(MAIN_GAME_MUSIC if not game.get_cur_level() == game.levels[1] else GYGA_GAME_MUSIC)
+    pygame.mixer.music.load(MAIN_GAME_MUSIC if not game.get_cur_level() == game.levels[-1] else GYGA_GAME_MUSIC)
     pygame.mixer.music.play(-1)
 
 

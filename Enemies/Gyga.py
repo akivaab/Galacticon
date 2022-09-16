@@ -31,11 +31,11 @@ class Gyga(BossEnemy):
 
     # Display the gyga on the screen
     def display(self, screen):
-        screen.blit(self.image, (self.x, self.y))
         if self.is_tracking:
-            screen.blit(self.tracker_image, (self.x, self.y + 128))
+            screen.blit(self.tracker_image, (self.x, self.y + 100))
         elif self.is_locked:
             screen.blit(self.tracker_image, (0, 700))  # offscreen
+        screen.blit(self.image, (self.x, self.y))
 
     def track(self, player_x):
         if self.is_tracking:
@@ -89,6 +89,7 @@ class Gyga(BossEnemy):
                 self.attack_section_timer = datetime.datetime.now()
                 self.step += 1
         elif self.step == 3:
+            pygame.mixer.Sound("assets/sounds/laser.wav").play(loops=3)
             self.bullets_fired.append(Bullet(self.x - 54, self.y + 148, self.laser_image, self.bullet_speed))
             self.bullets_fired.append(Bullet(self.x - 27, self.y + 148, self.laser_image, self.bullet_speed))
             self.bullets_fired.append(Bullet(self.x, self.y + 148, self.laser_image, self.bullet_speed))
@@ -111,6 +112,22 @@ class Gyga(BossEnemy):
     # Remove all bullets that flew offscreen
     def remove_offscreen_bullets(self):
         self.bullets_fired = list(filter(lambda b: b.y < 600 and 0 <= b.x <= 800, self.bullets_fired))
+
+    # Deduct from the number of hits the gyga can take
+    def hit(self):
+        pygame.mixer.Sound("assets/sounds/explosion.wav").play(maxtime=400)
+        self.num_hits -= 1
+        if self.num_hits == 60:
+            gyga_img = pygame.image.load("assets/enemies/gyga_damaged.png").convert()
+            gyga_img.set_colorkey((0, 0, 0))
+            self.image = gyga_img
+        elif self.num_hits == 30:
+            gyga_img = pygame.image.load("assets/enemies/gyga_critical.png").convert()
+            gyga_img.set_colorkey((0, 0, 0))
+            self.image = gyga_img
+        elif self.num_hits == 0:
+            pygame.mixer.Sound("assets/sounds/explosion.wav").play()
+            super(BossEnemy, self).hit()
 
     # Reset the gyga attack
     def reset(self):
