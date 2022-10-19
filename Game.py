@@ -153,9 +153,7 @@ class Game:
     # Move on to the next level
     def go_to_next_level(self, screen):
         self.current_level_num += 1
-        next_level_font = pygame.font.Font(ARCADE_FONT, 32)
-        next_level_text = next_level_font.render("Level " + str(self.current_level_num), True, (255, 255, 255))
-        screen.blit(next_level_text, (285, 280))
+        display_text(screen, "Level " + str(self.current_level_num), 32, (255, 255, 255), (285, 280))
 
     # Return if the game has been completed
     def is_completed(self):
@@ -167,34 +165,24 @@ class Game:
 
     # Display the lives, level, and score on the screen
     def display_data(self, screen, num_lives):
-        font = pygame.font.Font(ARCADE_FONT, 12)
-        lives = font.render("Lives:" + str(num_lives), True, (255, 255, 255))
-        level = font.render("Level:" + str(self.current_level_num), True, (255, 255, 255))
-        score = font.render("Score:" + str(self.current_score), True, (255, 255, 255))
-        screen.blit(lives, (0, 588))
-        screen.blit(level, (100, 588))
-        screen.blit(score, (210, 588))
+        display_text(screen, "Lives:" + str(num_lives), 12, (255, 255, 255), (0, 588))
+        display_text(screen, "Level:" + str(self.current_level_num), 12, (255, 255, 255), (100, 588))
+        display_text(screen, "Score:" + str(self.current_score), 12, (255, 255, 255), (210, 588))
 
     # Display a message after the player dies
     @staticmethod
     def resuscitation_message(screen):
-        get_ready_font = pygame.font.Font(ARCADE_FONT, 24)
-        get_ready_text = get_ready_font.render("Get Ready To Continue", True, (255, 255, 255))
-        screen.blit(get_ready_text, (150, 280))
+        display_text(screen, "Get Ready To Continue", 24, (255, 255, 255), (150, 280))
 
     # Display a message when the player loses
     @staticmethod
     def game_over_message(screen):
-        game_over_font = pygame.font.Font(ARCADE_FONT, 64)
-        game_over_text = game_over_font.render("GAME OVER", True, (255, 255, 255))
-        screen.blit(game_over_text, (110, 250))
+        display_text(screen, "GAME OVER", 64, (255, 255, 255), (110, 250))
 
     # Display a message when the player wins
     @staticmethod
     def game_completed_message(screen):
-        game_completed_font = pygame.font.Font(ARCADE_FONT, 64)
-        game_completed_text = game_completed_font.render("YOU WIN!!", True, (255, 255, 255))
-        screen.blit(game_completed_text, (110, 250))
+        display_text(screen, "YOU WIN!!", 64, (255, 255, 255), (110, 250))
 
     # Get some number of the top scores from the scoreboard
     @staticmethod
@@ -218,3 +206,10 @@ class Game:
             csv_writer = csv.writer(scoreboard)
             csv_writer.writerows(scores)
         return new_score
+
+
+# display text onto a given screen
+def display_text(screen, text, font_size, text_color, text_coordinates):
+    font = pygame.font.Font(ARCADE_FONT, font_size)
+    text_surface = font.render(text, True, text_color)
+    screen.blit(text_surface, text_coordinates)

@@ -31,20 +31,14 @@ def begin_screen():
     pygame.mixer.music.play(-1)
     screen.fill((0, 0, 0))
 
-    galacticon_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 64)
     colors = [(62, 216, 18), (11, 50, 253)]
     iterator = cycle(range(2))
 
     # opening menu button options
-    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 16)
-    menu_text = menu_font.render("Press ENTER to play!", True, (255, 255, 255))
-    screen.blit(menu_text, (240, 200))
-    menu_text = menu_font.render("Press A for instructions!", True, (255, 255, 255))
-    screen.blit(menu_text, (200, 230))
-    menu_text = menu_font.render("Press S to see the scoreboard!", True, (255, 255, 255))
-    screen.blit(menu_text, (170, 260))
-    menu_text = menu_font.render("Press U for no reason whatsoever!", True, (255, 255, 255))
-    screen.blit(menu_text, (150, 290))
+    display_text("Press ENTER to play!", 16, (255, 255, 255), (240, 200))
+    display_text("Press A for instructions!", 16, (255, 255, 255), (200, 230))
+    display_text("Press S to see the scoreboard!", 16, (255, 255, 255), (170, 260))
+    display_text("Press U for no reason whatsoever!", 16, (255, 255, 255), (150, 290))
 
     # screen loop
     begin_screen_running = True
@@ -54,10 +48,8 @@ def begin_screen():
         if datetime.datetime.now() >= color_swap_time:
             color_swap_time = datetime.datetime.now() + datetime.timedelta(seconds=0.3)
             next(iterator)
-            galacticon_text_1 = galacticon_font.render("G L C I O", True, colors[next(iterator)])
-            galacticon_text_2 = galacticon_font.render("A A T C N", True, colors[next(iterator)])
-            screen.blit(galacticon_text_1, (80, 80))
-            screen.blit(galacticon_text_2, (144, 80))
+            display_text("G L C I O", 64, colors[next(iterator)], (80, 80))
+            display_text("A A T C N", 64, colors[next(iterator)], (144, 80))
 
         # keyboard events
         for event in pygame.event.get():
@@ -74,30 +66,23 @@ def begin_screen():
                     arrow_keys_img = pygame.image.load("assets/misc/arrow_keys.png").convert()
                     arrow_keys_img.set_colorkey((0, 0, 0))
                     screen.blit(arrow_keys_img, (50, 380))
-                    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 12)
-                    arrow_keys_text = menu_font.render("press and hold the", True, (255, 255, 255))
-                    screen.blit(arrow_keys_text, (130, 380))
-                    arrow_keys_text = menu_font.render("arrow keys to move", True, (255, 255, 255))
-                    screen.blit(arrow_keys_text, (130, 400))
+                    display_text("press and hold the", 12, (255, 255, 255), (130, 380))
+                    display_text("arrow keys to move", 12, (255, 255, 255), (130, 400))
 
                     # how to fire
                     space_bar_img = pygame.image.load("assets/misc/space_bar.png").convert()
                     space_bar_img.set_colorkey((0, 0, 0))
                     space_bar_img = pygame.transform.scale(space_bar_img, (128, 32))
                     screen.blit(space_bar_img, (40, 450))
-                    arrow_keys_text = menu_font.render("press the space", True, (255, 255, 255))
-                    screen.blit(arrow_keys_text, (180, 450))
-                    arrow_keys_text = menu_font.render("bar to fire", True, (255, 255, 255))
-                    screen.blit(arrow_keys_text, (180, 470))
+                    display_text("press the space", 12, (255, 255, 255), (180, 450))
+                    display_text("bar to fire", 12, (255, 255, 255), (180, 470))
 
                     # how to pause
                     p_key_img = pygame.image.load("assets/misc/p_key.png").convert()
                     p_key_img.set_colorkey((0, 0, 0))
                     p_key_img = pygame.transform.scale(p_key_img, (48, 48))
                     screen.blit(p_key_img, (50, 510))
-                    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 12)
-                    arrow_keys_text = menu_font.render("press P to pause", True, (255, 255, 255))
-                    screen.blit(arrow_keys_text, (125, 520))
+                    display_text("press P to pause", 12, (255, 255, 255), (125, 520))
 
                     # enemy warning
                     sideswiper_img = pygame.image.load("assets/enemies/sideswiper.png").convert()
@@ -106,26 +91,20 @@ def begin_screen():
                     splicer_img = pygame.image.load("assets/enemies/splicer.png").convert()
                     splicer_img.set_colorkey((0, 0, 0))
                     screen.blit(splicer_img, (520, 450))
-                    enemy_text = menu_font.render("watch out for these guys!", True, (255, 255, 255))
-                    screen.blit(enemy_text, (460, 435))
+                    display_text("watch out for these guys!", 12, (255, 255, 255), (460, 435))
 
                 if event.key == pygame.K_s:  # scoreboard
                     pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
-                    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 16)
                     y_coord = 370
                     score_records = Game.read_scoreboard(5)
                     for score_record in score_records:
-                        score_text = menu_font.render(score_record[0], True, (255, 255, 255))
-                        screen.blit(score_text, (290, y_coord))
-                        score_text = menu_font.render(str(score_record[1].rjust(7, "0")), True, (255, 255, 255))
-                        screen.blit(score_text, (390, y_coord))
+                        display_text(score_record[0], 16, (255, 255, 255), (290, y_coord))
+                        display_text(str(score_record[1].rjust(7, "0")), 16, (255, 255, 255), (390, y_coord))
                         y_coord += 30
 
                 if event.key == pygame.K_u:  # for fun
                     pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
-                    menu_font = pygame.font.Font('assets/misc/PressStart2P-vaV7.ttf', 20)
-                    arrow_keys_text = menu_font.render("Well that was pointless.", True, (255, 255, 255))
-                    screen.blit(arrow_keys_text, (130, 430))
+                    display_text("Well that was pointless.", 20, (255, 255, 255), (130, 430))
 
         pygame.display.update()
 
@@ -304,19 +283,12 @@ def end_screen():
     # display "HIGH SCORE" on top of the screen if one was achieved
     achieved_high_score = len([record[1] for record in score_records if int(record[1]) > game.current_score]) == 0
     if achieved_high_score:
-        menu_font = pygame.font.Font(ARCADE_FONT, 48)
-        score_text = menu_font.render("HIGH SCORE", True, (255, 215, 0))
-        screen.blit(score_text, (160, 80))
+        display_text("HIGH SCORE", 48, (255, 215, 0), (160, 80))
 
     # display instructions for submitting initials
-    menu_font = pygame.font.Font(ARCADE_FONT, 24)
-    initials_text = menu_font.render("Enter your initials:", True, (255, 255, 255))
-    screen.blit(initials_text, (170, 200))
-    menu_font = pygame.font.Font(ARCADE_FONT, 16)
-    initials_text = menu_font.render("(three, specifically)", True, (255, 255, 255))
-    screen.blit(initials_text, (235, 230))
-    continue_text = menu_font.render("Press ENTER to continue.", True, (255, 255, 255))
-    screen.blit(continue_text, (215, 400))
+    display_text("Enter your initials:", 24, (255, 255, 255), (170, 200))
+    display_text("(three, specifically)", 16, (255, 255, 255), (235, 230))
+    display_text("Press ENTER to continue.", 16, (255, 255, 255), (215, 400))
 
     # enter the player's initials / alternate score display colors
     initials = ""
@@ -330,37 +302,28 @@ def end_screen():
                 pygame.quit()
                 exit()
             if event.type == pygame.TEXTINPUT and event.text.isalpha() and len(initials) < 3:  # type letter
-                menu_font = pygame.font.Font(ARCADE_FONT, 64)
                 initials += event.text.capitalize()
-                initial_text = menu_font.render(initials, True, (255, 255, 255))
-                screen.blit(initial_text, (300, 300))
+                display_text(initials, 64, (255, 255, 255), (300, 300))
             if event.type == pygame.KEYUP and event.key == pygame.K_RETURN:  # submit initials
                 entering_initials = len(initials) < 3
             if event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:  # remove letter
-                menu_font = pygame.font.Font(ARCADE_FONT, 64)
                 pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(300, 300, 200, 64))
                 initials = initials[:-1]
-                initial_text = menu_font.render(initials, True, (255, 255, 255))
-                screen.blit(initial_text, (300, 300))
+                display_text(initials, 64, (255, 255, 255), (300, 300))
 
         # alternate score display colors
         if datetime.datetime.now() >= color_swap_time:
             color_swap_time = datetime.datetime.now() + datetime.timedelta(seconds=0.3)
             next_color = colors[next(iterator)]
             # display the player's score
-            menu_font = pygame.font.Font(ARCADE_FONT, 42)
-            score_text = menu_font.render("You scored:", True, next_color)
-            screen.blit(score_text, (175, 450))
-            score_text = menu_font.render(str(game.current_score).rjust(7, "0"), True, next_color)
-            screen.blit(score_text, (250, 510))
+            display_text("You scored:", 42, next_color, (175, 450))
+            display_text(str(game.current_score).rjust(7, "0"), 42, next_color, (250, 510))
 
         pygame.display.update()
 
     # Easter Egg!
     if initials == "WHY":
-        menu_font = pygame.font.Font(ARCADE_FONT, 24)
-        easter_egg_text = menu_font.render("because.", True, (255, 0, 0))
-        screen.blit(easter_egg_text, (500, 400))
+        display_text("because.", 24, (255, 0, 0), (500, 400))
         pygame.display.update()
         pygame.time.wait(200)
 
@@ -372,7 +335,6 @@ def end_screen():
     screen.fill((0, 0, 0))
     new_score = game.write_scoreboard(initials)
     score_records = Game.read_scoreboard(10)
-    menu_font = pygame.font.Font(ARCADE_FONT, 24)
     y_coord = 100
     highlight_score = True
 
@@ -383,24 +345,18 @@ def end_screen():
                 and highlight_score:  # color the just-achieved score gold if in the top 10
             color = (255, 215, 0)
             highlight_score = False
-        score_text = menu_font.render(score_record[0], True, color)
-        screen.blit(score_text, (250, y_coord))
-        score_text = menu_font.render(str(score_record[1]).rjust(7, "0"), True, color)
-        screen.blit(score_text, (380, y_coord))
+        display_text(score_record[0], 24, color, (250, y_coord))
+        display_text(str(score_record[1]).rjust(7, "0"), 24, color, (380, y_coord))
         y_coord += 36
         pygame.display.update()
         pygame.time.wait(100)
 
     # display the just-achieved score
-    score_text = menu_font.render(new_score[0], True, (255, 215, 0))
-    screen.blit(score_text, (250, 500))
-    score_text = menu_font.render(str(new_score[1]).rjust(7, "0"), True, (255, 215, 0))
-    screen.blit(score_text, (380, 500))
+    display_text(new_score[0], 24, (255, 215, 0), (250, 500))
+    display_text(str(new_score[1]).rjust(7, "0"), 24, (255, 215, 0), (380, 500))
 
     # instruction display
-    menu_font = pygame.font.Font(ARCADE_FONT, 16)
-    continue_text = menu_font.render("Press ENTER to play again.", True, (255, 255, 255))
-    screen.blit(continue_text, (200, 560))
+    display_text("Press ENTER to play again.", 16, (255, 255, 255), (200, 560))
     pygame.display.update()
 
     # wait to end loop
@@ -463,6 +419,12 @@ def gyga_cutscene(gyga):
 
     pygame.mixer.music.load(GYGA_GAME_MUSIC)
     pygame.mixer.music.play(-1)
+
+
+def display_text(text, font_size, text_color, text_coordinates):
+    font = pygame.font.Font(ARCADE_FONT, font_size)
+    text_surface = font.render(text, True, text_color)
+    screen.blit(text_surface, text_coordinates)
 
 
 if __name__ == "__main__":
