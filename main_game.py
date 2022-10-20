@@ -74,7 +74,11 @@ def begin_screen():
 
                     # how to pause
                     display_image("assets/misc/p_key.png", (50, 510), (48, 48))
-                    display_text("press P to pause", 12, (255, 255, 255), (125, 520))
+                    display_text("press P to pause", 12, (255, 255, 255), (105, 510))
+
+                    # how to mute
+                    display_image("assets/misc/m_key.png", (320, 510), (48, 48))
+                    display_text("press M to mute", 12, (255, 255, 255), (135, 545))
 
                     # enemy warning
                     display_image("assets/enemies/sideswiper.png", (640, 370))
@@ -94,6 +98,9 @@ def begin_screen():
                     pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 600))
                     display_text("Well that was pointless.", 20, (255, 255, 255), (130, 430))
 
+                if event.key == pygame.K_m:
+                    mute()
+
         pygame.display.update()
 
 
@@ -106,6 +113,7 @@ def play_game():
 
     # game loop
     game_running = True
+    is_muted = pygame.mixer.music.get_volume() == 0.0
     while game_running:
         level_is_completed = False
         player_x_change = 0
@@ -139,6 +147,9 @@ def play_game():
                         player_y_change = 0
                     if event.key == pygame.K_p:
                         pause()
+                    if event.key == pygame.K_m:
+                        mute()
+                        is_muted = not is_muted
 
             # move and display the player
             player.move(player_x_change, player_y_change)
@@ -204,8 +215,10 @@ def play_game():
                 laserbeam.display(screen)
             game.splicer.display(screen)
 
-            # update the game screen display
+            # update the HUD
             game.display_data(screen, player.lives)
+            if is_muted:
+                display_image("assets/misc/muted_speaker.png", (765, 565))
             clock.tick(75)
             pygame.display.update()
 
@@ -253,6 +266,8 @@ def play_game():
         if game_running and level_is_completed and game.get_cur_level() == game.levels[-1]:
             gyga_cutscene(enemies_grid[0][0])
 
+        pygame.event.clear()
+
     # end game
 
 
@@ -292,8 +307,9 @@ def end_screen():
             if event.type == pygame.TEXTINPUT and event.text.isalpha() and len(initials) < 3:  # type letter
                 initials += event.text.capitalize()
                 display_text(initials, 64, (255, 255, 255), (300, 300))
-            if event.type == pygame.KEYUP and event.key == pygame.K_RETURN:  # submit initials
-                entering_initials = len(initials) < 3
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_RETURN:  # submit initials
+                    entering_initials = len(initials) < 3
             if event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:  # remove letter
                 pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(300, 300, 200, 64))
                 initials = initials[:-1]
@@ -354,8 +370,11 @@ def end_screen():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if event.type == pygame.KEYUP and event.key == pygame.K_RETURN:
-                scoreboard_running = False
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_RETURN:
+                    scoreboard_running = False
+                if event.key == pygame.K_m:
+                    mute()
 
 
 def pause():
@@ -371,13 +390,18 @@ def pause():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if event.type == pygame.KEYUP and event.key == pygame.K_p:
-                paused = False
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_p:
+                    paused = False
 
     # reset music
     pygame.display.set_caption("Galacticon")
     pygame.mixer.music.load(MAIN_GAME_MUSIC if not game.get_cur_level() == game.levels[-1] else GYGA_GAME_MUSIC)
     pygame.mixer.music.play(-1)
+
+
+def mute():
+    pygame.mixer.music.set_volume(0.9921875 - pygame.mixer.music.get_volume())
 
 
 def gyga_cutscene(gyga):
@@ -393,6 +417,8 @@ def gyga_cutscene(gyga):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+            if event.type == pygame.KEYUP and event.key == pygame.K_m:
+                mute()
         screen.fill((0, 0, 0))
         gyga.y += 0.04
         gyga.display(screen)
@@ -402,6 +428,8 @@ def gyga_cutscene(gyga):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+            if event.type == pygame.KEYUP and event.key == pygame.K_m:
+                mute()
             if event.type == music_end:
                 playing = False
 
@@ -417,6 +445,7 @@ def display_text(text, font_size, text_color, text_coordinates):
 
 def display_image(image_path, image_coordinates, scale_factor=(0, 0)):
     image = pygame.image.load(image_path).convert()
+    image.set_colorkey((0, 0, 0))
     if scale_factor != (0, 0):
         image = pygame.transform.scale(image, scale_factor)
     screen.blit(image, image_coordinates)
