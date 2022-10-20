@@ -63,34 +63,22 @@ def begin_screen():
                     pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(0, 350, 800, 400))
 
                     # how to move
-                    arrow_keys_img = pygame.image.load("assets/misc/arrow_keys.png").convert()
-                    arrow_keys_img.set_colorkey((0, 0, 0))
-                    screen.blit(arrow_keys_img, (50, 380))
+                    display_image("assets/misc/arrow_keys.png", (50, 380))
                     display_text("press and hold the", 12, (255, 255, 255), (130, 380))
                     display_text("arrow keys to move", 12, (255, 255, 255), (130, 400))
 
                     # how to fire
-                    space_bar_img = pygame.image.load("assets/misc/space_bar.png").convert()
-                    space_bar_img.set_colorkey((0, 0, 0))
-                    space_bar_img = pygame.transform.scale(space_bar_img, (128, 32))
-                    screen.blit(space_bar_img, (40, 450))
+                    display_image("assets/misc/space_bar.png", (40, 450), (128, 32))
                     display_text("press the space", 12, (255, 255, 255), (180, 450))
                     display_text("bar to fire", 12, (255, 255, 255), (180, 470))
 
                     # how to pause
-                    p_key_img = pygame.image.load("assets/misc/p_key.png").convert()
-                    p_key_img.set_colorkey((0, 0, 0))
-                    p_key_img = pygame.transform.scale(p_key_img, (48, 48))
-                    screen.blit(p_key_img, (50, 510))
+                    display_image("assets/misc/p_key.png", (50, 510), (48, 48))
                     display_text("press P to pause", 12, (255, 255, 255), (125, 520))
 
                     # enemy warning
-                    sideswiper_img = pygame.image.load("assets/enemies/sideswiper.png").convert()
-                    sideswiper_img.set_colorkey((0, 0, 0))
-                    screen.blit(sideswiper_img, (640, 370))
-                    splicer_img = pygame.image.load("assets/enemies/splicer.png").convert()
-                    splicer_img.set_colorkey((0, 0, 0))
-                    screen.blit(splicer_img, (520, 450))
+                    display_image("assets/enemies/sideswiper.png", (640, 370))
+                    display_image("assets/enemies/splicer.png", (520, 450))
                     display_text("watch out for these guys!", 12, (255, 255, 255), (460, 435))
 
                 if event.key == pygame.K_s:  # scoreboard
@@ -425,6 +413,13 @@ def display_text(text, font_size, text_color, text_coordinates):
     font = pygame.font.Font(ARCADE_FONT, font_size)
     text_surface = font.render(text, True, text_color)
     screen.blit(text_surface, text_coordinates)
+
+
+def display_image(image_path, image_coordinates, scale_factor=(0, 0)):
+    image = pygame.image.load(image_path).convert()
+    if scale_factor != (0, 0):
+        image = pygame.transform.scale(image, scale_factor)
+    screen.blit(image, image_coordinates)
 
 
 if __name__ == "__main__":
