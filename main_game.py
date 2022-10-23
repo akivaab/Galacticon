@@ -99,7 +99,7 @@ def begin_screen():
                     display_text("Well that was pointless.", 20, (255, 255, 255), (130, 430))
 
                 if event.key == pygame.K_m:
-                    mute()
+                    game.mute()
 
         pygame.display.update()
 
@@ -113,7 +113,6 @@ def play_game():
 
     # game loop
     game_running = True
-    is_muted = pygame.mixer.music.get_volume() == 0.0
     while game_running:
         level_is_completed = False
         player_x_change = 0
@@ -148,8 +147,7 @@ def play_game():
                     if event.key == pygame.K_p:
                         pause()
                     if event.key == pygame.K_m:
-                        mute()
-                        is_muted = not is_muted
+                        game.mute()
 
             # move and display the player
             player.move(player_x_change, player_y_change)
@@ -217,7 +215,7 @@ def play_game():
 
             # update the HUD
             game.display_data(screen, player.lives)
-            if is_muted:
+            if game.is_muted:
                 display_image("assets/misc/muted_speaker.png", (765, 565))
             clock.tick(75)
             pygame.display.update()
@@ -374,7 +372,7 @@ def end_screen():
                 if event.key == pygame.K_RETURN:
                     scoreboard_running = False
                 if event.key == pygame.K_m:
-                    mute()
+                    Game.mute()
 
 
 def pause():
@@ -400,10 +398,6 @@ def pause():
     pygame.mixer.music.play(-1)
 
 
-def mute():
-    pygame.mixer.music.set_volume(0.9921875 - pygame.mixer.music.get_volume())
-
-
 def gyga_cutscene(gyga):
     # Opening cutscene
     music_end = pygame.USEREVENT + 1
@@ -418,7 +412,7 @@ def gyga_cutscene(gyga):
                 pygame.quit()
                 exit()
             if event.type == pygame.KEYUP and event.key == pygame.K_m:
-                mute()
+                Game.mute()
         screen.fill((0, 0, 0))
         gyga.y += 0.04
         gyga.display(screen)
@@ -429,7 +423,7 @@ def gyga_cutscene(gyga):
                 pygame.quit()
                 exit()
             if event.type == pygame.KEYUP and event.key == pygame.K_m:
-                mute()
+                Game.mute()
             if event.type == music_end:
                 playing = False
 

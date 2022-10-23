@@ -82,6 +82,7 @@ class Game:
         self.bonuses_dropped = []
         self.splicer = Splicer()
         self.splicer_deployed = False
+        self.is_muted = False
 
     # Get the current level
     def get_cur_level(self):
@@ -206,6 +207,12 @@ class Game:
             csv_writer = csv.writer(scoreboard)
             csv_writer.writerows(scores)
         return new_score
+
+    # Mute the game
+    def mute(self, screen):
+        self.is_muted = not self.is_muted
+        pygame.mixer.music.set_volume(0.9921875 - pygame.mixer.music.get_volume())
+        # block mute symbol with rec when not muted                               <-------------
 
 
 # display text onto a given screen
