@@ -212,7 +212,13 @@ class Game:
     def mute(self, screen):
         self.is_muted = not self.is_muted
         pygame.mixer.music.set_volume(0.9921875 - pygame.mixer.music.get_volume())
-        # block mute symbol with rec when not muted                               <-------------
+        if self.is_muted:
+            mute_image = pygame.image.load("assets/misc/muted_speaker.png").convert()
+            mute_image.set_colorkey((0, 0, 0))
+            screen.blit(mute_image, (765, 565))
+        else:
+            pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(765, 565, 32, 32))
+        pygame.display.update(pygame.rect.Rect(765, 565, 32, 32))
 
 
 # display text onto a given screen

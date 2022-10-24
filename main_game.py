@@ -99,7 +99,7 @@ def begin_screen():
                     display_text("Well that was pointless.", 20, (255, 255, 255), (130, 430))
 
                 if event.key == pygame.K_m:
-                    game.mute()
+                    game.mute(screen)
 
         pygame.display.update()
 
@@ -147,7 +147,7 @@ def play_game():
                     if event.key == pygame.K_p:
                         pause()
                     if event.key == pygame.K_m:
-                        game.mute()
+                        game.mute(screen)
 
             # move and display the player
             player.move(player_x_change, player_y_change)
@@ -372,7 +372,7 @@ def end_screen():
                 if event.key == pygame.K_RETURN:
                     scoreboard_running = False
                 if event.key == pygame.K_m:
-                    Game.mute()
+                    game.mute(screen)
 
 
 def pause():
@@ -391,6 +391,8 @@ def pause():
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_p:
                     paused = False
+                if event.key == pygame.K_m:
+                    game.mute(screen)
 
     # reset music
     pygame.display.set_caption("Galacticon")
@@ -412,7 +414,7 @@ def gyga_cutscene(gyga):
                 pygame.quit()
                 exit()
             if event.type == pygame.KEYUP and event.key == pygame.K_m:
-                Game.mute()
+                game.mute(screen)
         screen.fill((0, 0, 0))
         gyga.y += 0.04
         gyga.display(screen)
@@ -423,7 +425,7 @@ def gyga_cutscene(gyga):
                 pygame.quit()
                 exit()
             if event.type == pygame.KEYUP and event.key == pygame.K_m:
-                Game.mute()
+                game.mute(screen)
             if event.type == music_end:
                 playing = False
 
