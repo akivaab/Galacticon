@@ -216,8 +216,10 @@ class Game:
             mute_image = pygame.image.load("assets/misc/muted_speaker.png").convert()
             mute_image.set_colorkey((0, 0, 0))
             screen.blit(mute_image, (765, 565))
+            pygame.display.set_caption("The world has gone silent! Oh wait, there's still laser sounds.")
         else:
             pygame.draw.rect(screen, (0, 0, 0), pygame.rect.Rect(765, 565, 32, 32))
+            pygame.display.set_caption("Galacticon")
         pygame.display.update(pygame.rect.Rect(765, 565, 32, 32))
 
 

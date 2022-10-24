@@ -377,7 +377,8 @@ def end_screen():
 
 def pause():
     # init
-    pygame.display.set_caption("Soothing alien invasion noises")
+    caption = "Soothing alien invasion noises" if not game.is_muted else "You don't like the music OR the game?!"
+    pygame.display.set_caption(caption)
     pygame.mixer.music.load("assets/music/deltarune_thrash_machine.wav")
     pygame.mixer.music.play(-1)
 
@@ -393,9 +394,13 @@ def pause():
                     paused = False
                 if event.key == pygame.K_m:
                     game.mute(screen)
+                    caption = "I said, soothing alien invasion NOISES!!" if not game.is_muted \
+                        else "You don't like the music OR the game?!"
+                    pygame.display.set_caption(caption)
 
     # reset music
-    pygame.display.set_caption("Galacticon")
+    caption = "The world has gone silent! Oh wait, there's still laser sounds." if game.is_muted else "Galacticon"
+    pygame.display.set_caption(caption)
     pygame.mixer.music.load(MAIN_GAME_MUSIC if not game.get_cur_level() == game.levels[-1] else GYGA_GAME_MUSIC)
     pygame.mixer.music.play(-1)
 
