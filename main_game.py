@@ -1,4 +1,5 @@
 import datetime
+from sys import exit
 from itertools import cycle
 from Game import *
 from Player import *
